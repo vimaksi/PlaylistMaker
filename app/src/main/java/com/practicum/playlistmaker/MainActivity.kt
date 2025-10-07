@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker
 
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,12 +17,20 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         val search = findViewById<TextView>(R.id.search)
+
+        val imageClickListener: View.OnClickListener = object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                Toast.makeText(this@MainActivity, "Нажали на картинку 1!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        search.setOnClickListener(imageClickListener)
+
         val library = findViewById<TextView>(R.id.library)
         val settings = findViewById<TextView>(R.id.settings)
-        search.setOnClickListener {
-            Toast.makeText(this@MainActivity, "Нажали на картинку 1!", Toast.LENGTH_SHORT).show()
-        }
+
         library.setOnClickListener {
             Toast.makeText(this@MainActivity, "Нажали на картинку 2!", Toast.LENGTH_SHORT).show()
         }

@@ -3,14 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/settings">
     <Toolbar
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:navigationIcon="@drawable/arrow_back"
         android:title="@string/setup"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_medium"/>
+        android:textSize="@dimen/text_size_medium"
+        android:id="@+id/back_to_main"/>
 
     <androidx.appcompat.widget.SwitchCompat
         android:layout_width="match_parent"

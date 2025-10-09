@@ -2,11 +2,11 @@ package com.practicum.playlistmaker
 
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import android.content.Intent
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,24 +18,28 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val search = findViewById<TextView>(R.id.search)
+        val search = findViewById<Button>(R.id.search)
 
-        val imageClickListener: View.OnClickListener = object : View.OnClickListener {
+        val searchClickListener: View.OnClickListener = object : View.OnClickListener {
             override fun onClick(v: View?) {
-                Toast.makeText(this@MainActivity, "Нажали на картинку 1!", Toast.LENGTH_SHORT).show()
+                val searchIntent = Intent(this@MainActivity, SearchActivity::class.java)
+                startActivity(searchIntent)
             }
         }
 
-        search.setOnClickListener(imageClickListener)
+        search.setOnClickListener(searchClickListener)
 
-        val library = findViewById<TextView>(R.id.library)
-        val settings = findViewById<TextView>(R.id.settings)
+        val library = findViewById<Button>(R.id.library)
 
         library.setOnClickListener {
-            Toast.makeText(this@MainActivity, "Нажали на картинку 2!", Toast.LENGTH_SHORT).show()
+            val libraryIntent = Intent(this, LibraryActivity::class.java)
+            startActivity(libraryIntent)
         }
+
+        val settings = findViewById<Button>(R.id.settings)
         settings.setOnClickListener {
-            Toast.makeText(this@MainActivity, "Нажали на картинку 3!", Toast.LENGTH_SHORT).show()
+            val settingsIntent = Intent(this, SettingsActivity::class.java)
+            startActivity(settingsIntent)
         }
     }
 }

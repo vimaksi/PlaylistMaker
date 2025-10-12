@@ -3,7 +3,6 @@ package com.practicum.playlistmaker
 import android.os.Bundle
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
-import android.content.Intent
 
 class SettingsActivity:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,8 +12,7 @@ class SettingsActivity:AppCompatActivity() {
         val main = findViewById<Toolbar>(R.id.back_to_main)
 
         main.setOnClickListener{
-            val mainIntent = Intent(this, MainActivity::class.java)
-            startActivity(mainIntent)
+            finish()
         }
     }
 }

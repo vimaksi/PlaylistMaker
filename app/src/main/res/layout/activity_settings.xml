@@ -1,19 +1,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
-    android:id="@+id/settings">
+    android:orientation="vertical">
     <Toolbar
+        android:id="@+id/back_to_main"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:navigationIcon="@drawable/ic_arrow_back_24"
         android:title="@string/setup"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnPrimary"
         android:textSize="@dimen/text_size_medium"
-        android:id="@+id/back_to_main"/>
-
+        android:fontFamily="@font/ys_display_medium"
+        android:textFontWeight="500"/>
     <androidx.appcompat.widget.SwitchCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,43 +23,19 @@
         android:paddingStart="@dimen/paddingHorizontal_small"
         android:paddingEnd="@dimen/padding_small"
         android:text="@string/dark_mode"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_small" />
-
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="@dimen/text_size_small"
+        android:fontFamily="@font/ys_display_regular"/>
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/minHeight"
         android:text="@string/share_app"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_small"
         app:drawableEndCompat="@drawable/ic_share_24"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="@dimen/paddingHorizontal_small"
-        android:layout_gravity="center"
-        />
+        style="@style/SettingsTextStyle"/>
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/minHeight"
         android:text="@string/write_support"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_small"
         app:drawableEndCompat="@drawable/ic_support_24"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="@dimen/paddingHorizontal_small"
-        android:layout_gravity="center"
-        />
+        style="@style/SettingsTextStyle"/>
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/minHeight"
         android:text="@string/user_agreement"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_small"
         app:drawableEndCompat="@drawable/ic_arrow_forward_24"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="@dimen/paddingHorizontal_small"
-        android:layout_gravity="center"
-        />
+        style="@style/SettingsTextStyle"/>
     </LinearLayout>

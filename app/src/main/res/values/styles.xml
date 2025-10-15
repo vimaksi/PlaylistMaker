@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MainButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/null_dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">@dimen/button_radius</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">@dimen/icon_padding</item>
+        <item name="iconTint">?attr/colorOnSecondary</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:layout_marginTop">@dimen/padding_medium</item>
+        <item name="android:textFontWeight">500</item>
+    </style>
+    <style name="SettingsTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/minHeight</item>
+        <item name="android:textColor">@color/black_0</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingHorizontal">@dimen/paddingHorizontal_small</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+</resources>

@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -38,10 +39,14 @@ class SettingsActivity : AppCompatActivity() {
             val sendIntent = Intent(Intent.ACTION_SENDTO)
             sendIntent.data = Uri.parse("mailto:")
             //получатель
-            sendIntent.putExtra(Intent.EXTRA_EMAIL, R.string.recipient)
+            sendIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(R.string.recipient))
             //sendIntent.putExtra(Intent.EXTRA_)
             sendIntent.putExtra(Intent.EXTRA_TEXT, R.string.letter_text)
-            this.startActivity(sendIntent)
+            startActivity(sendIntent)
+            val intent = getIntent()
+            val emails: Array<String>? = intent.getStringArrayExtra(Intent.EXTRA_EMAIL)
+            val message: String? = intent.getStringExtra(Intent.EXTRA_TEXT)
+
             //тема?
             //текст?
         }

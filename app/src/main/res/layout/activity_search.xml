@@ -1,8 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/search"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchActivity">
-</androidx.constraintlayout.widget.ConstraintLayout>
+    android:orientation="vertical">
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/to_main"
+        app:title="@string/search"
+        style="@style/ToolbarStyle"/>
+    <EditText
+        android:id="@+id/inputEditText"
+        style="@style/TextViewSearchStyle"/>
+</LinearLayout>

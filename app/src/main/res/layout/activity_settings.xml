@@ -6,15 +6,8 @@
     android:orientation="vertical">
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/back_to_main"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:fontFamily="@font/ys_display_medium"
-        android:textColor="?attr/colorOnSecondary"
-        android:textFontWeight="500"
-        android:textSize="@dimen/text_size_medium"
-        app:navigationIcon="@drawable/ic_arrow_back_24"
         app:title="@string/setup"
-        app:navigationIconTint="?attr/colorControlNormal"/>
+        style="@style/ToolbarStyle"/>
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -12,11 +12,8 @@
             <!-- Status bar color. -->
             <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
             <!-- Customize your theme here. -->
-            <!--<item name="thumbTint">@color/green</item>
-            <item name="trackTint">@color/green_light</item>-->
             <item name="colorControlNormal">@color/black</item>
-            <item name="colorAccent"> @color/green</item>
-            <!-- <item name="android:background">@color/black</item>-->
+            <item name="colorAccent">@color/green</item>
          </style>
          <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
      </resources>

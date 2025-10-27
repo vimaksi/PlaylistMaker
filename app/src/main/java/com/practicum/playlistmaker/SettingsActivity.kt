@@ -28,31 +28,29 @@ class SettingsActivity : AppCompatActivity() {
         main.setOnClickListener{
             finish()
         }
-        //отправить сообщение
-        //val shareIntent = Intent(Intent.ACTION_SEND)
-        //shareIntent.putExtra(R.string.link_android_developer)
 
+        val message = findViewById<TextView>(R.id.share_app)
+        message.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(Intent.EXTRA_TEXT,getString(R.string.link_android_developer))
+            startActivity(Intent.createChooser(shareIntent,"Отправить через"))
+        }
 
         val send = findViewById<TextView>(R.id.write_support)
         send.setOnClickListener {
-            //отправить емеил
             val sendIntent = Intent(Intent.ACTION_SENDTO)
             sendIntent.data = Uri.parse("mailto:")
-            //получатель
-            sendIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(R.string.recipient))
-            //sendIntent.putExtra(Intent.EXTRA_)
-            sendIntent.putExtra(Intent.EXTRA_TEXT, R.string.letter_text)
+            sendIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.recipient)))
+            sendIntent.putExtra(Intent.EXTRA_SUBJECT,getString(R.string .letters_theme))
+            sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.letter_text))
             startActivity(sendIntent)
-            val intent = getIntent()
-            val emails: Array<String>? = intent.getStringArrayExtra(Intent.EXTRA_EMAIL)
-            val message: String? = intent.getStringExtra(Intent.EXTRA_TEXT)
-
-            //тема?
-            //текст?
         }
         val browse = findViewById<TextView>(R.id.user_agreement)
         browse.setOnClickListener {
-            val browseIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://yandex.ru/legal/practicum_offer/"))
+            val uri = Uri.parse(getString(R.string.agreement))
+            val browseIntent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(browseIntent)
         }
     }
 }

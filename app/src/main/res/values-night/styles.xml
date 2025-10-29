@@ -41,19 +41,17 @@
     </style>
     <style name="TextViewSearchStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">52dp</item>
+        <item name="android:layout_height">36dp</item>
         <item name="android:hint">@string/search</item>
-        <item name="android:maxLength">5</item>
+        <item name="android:maxLength">255</item>
         <item name="android:maxLines">1</item>
-        <item name="android:inputType">number</item>
+        <item name="android:inputType">text</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:textColorHint">@color/black</item>
-        <item name="android:paddingHorizontal">@dimen/padding_medium</item>
+        <item name="android:textColorHint">?attr/editTextColor</item>
         <item name="android:drawableStart">@drawable/ic_search_24</item>
-        <item name="android:drawableTint">@color/black</item>
+        <item name="android:drawableTint">?attr/editTextColor</item>
         <item name="android:drawablePadding">@dimen/small_radius</item>
-        <item name="android:layout_marginStart">@dimen/paddingHorizontal_small</item>
-        <item name="android:background">@color/white</item>
-        <item name="android:radius">@dimen/small_radius</item>
+        <item name="android:background">@drawable/text_view_shape</item>
+        <item name="android:paddingStart">@dimen/padding_medium</item>
     </style>
 </resources>

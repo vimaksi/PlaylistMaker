@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class SettingsActivity : AppCompatActivity() {
+class  SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,15 +34,15 @@ class SettingsActivity : AppCompatActivity() {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "text/plain"
             shareIntent.putExtra(Intent.EXTRA_TEXT,getString(R.string.link_android_developer))
-            startActivity(Intent.createChooser(shareIntent,"Отправить через"))
+            startActivity(Intent.createChooser(shareIntent,getString(R.string.share_with)))
         }
 
         val send = findViewById<TextView>(R.id.write_support)
         send.setOnClickListener {
             val sendIntent = Intent(Intent.ACTION_SENDTO)
-            sendIntent.data = Uri.parse("mailto:")
+            sendIntent.data = Uri.parse(getString(R.string.mail_to))
             sendIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.recipient)))
-            sendIntent.putExtra(Intent.EXTRA_SUBJECT,getString(R.string .letters_theme))
+            sendIntent.putExtra(Intent.EXTRA_SUBJECT,getString(R.string.letters_theme))
             sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.letter_text))
             startActivity(sendIntent)
         }

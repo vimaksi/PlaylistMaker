@@ -8,6 +8,7 @@
 
     <dimen name="paddingHorizontal_small">12dp</dimen>
 
+    <dimen name="padding_small_8">8dp</dimen>
     <dimen name="padding_small">14dp</dimen>
     <dimen name="padding_medium">16dp</dimen>
 

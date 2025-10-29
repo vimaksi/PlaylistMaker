@@ -1,14 +1,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/search"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/to_main"
+        android:id="@+id/back"
         app:title="@string/search"
         style="@style/ToolbarStyle"/>
-    <EditText
-        android:id="@+id/inputEditText"
-        style="@style/TextViewSearchStyle"/>
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/inputEditText"
+            android:saveEnabled="false"
+            style="@style/TextViewSearchStyle"
+            android:layout_marginHorizontal="@dimen/padding_medium"
+            android:layout_marginTop="@dimen/padding_small_8"
+            android:textCursorDrawable="@drawable/blue_cursor"
+            />
+        <ImageView
+            android:id="@+id/clearIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="28dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_cancel_16"
+            android:background="?attr/colorOnBackground"
+            app:tint="?attr/editTextColor"/>
+    </FrameLayout>
 </LinearLayout>

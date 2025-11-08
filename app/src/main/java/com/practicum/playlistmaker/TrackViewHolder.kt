@@ -20,9 +20,9 @@ class TrackViewHolder (parent : ViewGroup) : RecyclerView.ViewHolder(
     private val sourceTime: TextView = itemView.findViewById(R.id.trackTime)
     private val sourceArtist: TextView = itemView.findViewById(R.id.artistName)
     fun bind(model: Track) {
-        sourceName.text = model.trackName.toString()
-        sourceArtist.text = model.artistName.toString()
-        sourceTime.text = model.trackTime.toString()
+        sourceName.text = model.trackName
+        sourceArtist.text = model.artistName
+        sourceTime.text = model.trackTime
         Glide.with(itemView)
             .load(model.artworkUrl100)
             .placeholder(R.drawable.ic_placeholder_45)

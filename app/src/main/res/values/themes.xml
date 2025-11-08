@@ -16,6 +16,7 @@
             <item name="colorAccent">@color/green</item>
             <item name="colorOnBackground">@color/gray_light</item>
             <item name="editTextColor">@color/gray</item>
+            <item name="android:drawableTint">@color/gray</item>
          </style>
          <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
      </resources>

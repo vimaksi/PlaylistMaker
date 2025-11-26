@@ -2,4 +2,6 @@
 <resources>
     <attr name="editTextColor" format="color" />
     <attr name="drawableTint" format="color"/>
+    <attr name="buttonUpdateTint" format="color"/>
+    <attr name="buttonUpdateText" format="color"/>
 </resources>

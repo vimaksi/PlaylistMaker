@@ -22,7 +22,7 @@ class TrackViewHolder (parent : ViewGroup) : RecyclerView.ViewHolder(
     fun bind(model: Track) {
         sourceName.text = model.trackName
         sourceArtist.text = model.artistName
-        sourceTime.text = model.trackTime
+        sourceTime.text = model.getFormattedTime()
         Glide.with(itemView)
             .load(model.artworkUrl100)
             .placeholder(R.drawable.ic_placeholder_45)

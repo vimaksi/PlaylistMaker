@@ -44,7 +44,8 @@
             <TextView
                 style="@style/TrackViewStyle"
                 android:paddingHorizontal="5dp"
-                app:drawableEndCompat="@drawable/ic_ellipse_3"/>
+                app:drawableStartCompat="@drawable/ic_ellipse_3"
+                />
             <TextView
                 android:id="@+id/trackTime"
                 tools:text="@string/time"

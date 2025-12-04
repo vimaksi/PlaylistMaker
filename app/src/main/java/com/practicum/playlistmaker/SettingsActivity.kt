@@ -1,15 +1,20 @@
 package com.practicum.playlistmaker
 
+import android.R.attr.checked
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-
+import com.google.android.material.switchmaterial.SwitchMaterial
+import java.lang.Boolean.FALSE
+import java.lang.Boolean.getBoolean
 class  SettingsActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -51,6 +56,16 @@ class  SettingsActivity : AppCompatActivity() {
             val uri = Uri.parse(getString(R.string.agreement))
             val browseIntent = Intent(Intent.ACTION_VIEW, uri)
             startActivity(browseIntent)
+        }
+
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
+
+        val sharedPrefs = getSharedPreferences(PM_PREFERENCES, MODE_PRIVATE)
+
+        //themeSwitcher.setChecked(sharedPrefs.getBoolean(DARK_THEME_KEY,FALSE))
+        themeSwitcher.isChecked = sharedPrefs.getBoolean(DARK_THEME_KEY,false)
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
         }
     }
 }

@@ -3,7 +3,6 @@ package com.practicum.playlistmaker
 import android.content.Context
 import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -21,8 +20,9 @@ class TrackViewHolder (parent : ViewGroup) : RecyclerView.ViewHolder(
     private val sourceArtist: TextView = itemView.findViewById(R.id.artistName)
     fun bind(model: Track) {
         sourceName.text = model.trackName
+        sourceArtist.text = ""
         sourceArtist.text = model.artistName
-        sourceTime.text = model.trackTime
+        sourceTime.text = model.getFormattedTime()
         Glide.with(itemView)
             .load(model.artworkUrl100)
             .placeholder(R.drawable.ic_placeholder_45)

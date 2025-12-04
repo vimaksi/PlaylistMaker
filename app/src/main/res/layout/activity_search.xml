@@ -1,41 +1,98 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/back"
-        app:title="@string/search"
-        style="@style/ToolbarStyle"/>
+        style="@style/ToolbarStyle"
+        app:title="@string/search" />
+
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:orientation="horizontal">
+
         <EditText
             android:id="@+id/inputEditText"
-            android:saveEnabled="false"
             style="@style/TextViewSearchStyle"
             android:layout_marginHorizontal="@dimen/padding_medium"
             android:layout_marginTop="@dimen/padding_small_8"
-            android:textCursorDrawable="@drawable/blue_cursor"
-            />
+            android:imeOptions="actionDone"
+            android:saveEnabled="false"
+            android:singleLine="true"
+            android:textCursorDrawable="@drawable/blue_cursor" />
+
         <ImageView
             android:id="@+id/clearIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="28dp"
+            android:background="?attr/colorOnBackground"
             android:visibility="gone"
             app:srcCompat="@drawable/ic_cancel_16"
-            android:background="?attr/colorOnBackground"
-            app:tint="?attr/editTextColor"/>
+            app:tint="?attr/editTextColor" />
     </FrameLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/padding_medium"/>
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/padding_medium"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        <LinearLayout
+            android:id="@+id/errorInternet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginVertical="102dp"
+            android:orientation="vertical"
+            android:visibility="visible">
+            <TextView
+                android:text="@string/problem_with_internet"
+                app:drawableTopCompat="@drawable/ic_ph_no_internet_120"
+                style="@style/TextViewErrorStyle"/>
+
+            <Button
+                android:id="@+id/updateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginVertical="24dp"
+                android:backgroundTint="?attr/buttonUpdateTint"
+                android:fontFamily="@font/ys_display_medium"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="10dp"
+                android:text="@string/update"
+                android:textAllCaps="false"
+                android:textColor="?attr/buttonUpdateText"
+                android:textFontWeight="500"
+                android:textSize="14sp"
+                app:cornerRadius="54dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/errorNoData"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginVertical="102dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:text="@string/not_found"
+                app:drawableTopCompat="@drawable/ic_ph_no_found_120"
+                style="@style/TextViewErrorStyle"/>
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

@@ -3,6 +3,7 @@ import org.gradle.kotlin.dsl.annotationProcessor
 
 
 
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -53,4 +54,6 @@ dependencies {
     implementation(libs.material.v161)
     implementation (libs.glide)
     annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 }

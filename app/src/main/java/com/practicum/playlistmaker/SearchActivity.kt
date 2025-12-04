@@ -29,16 +29,17 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+const val trackBaseUrl = "https://itunes.apple.com/"
 
 class SearchActivity : AppCompatActivity() {
-    private val trackBaseUrl = "https://itunes.apple.com/"
+
     private val retrofit = Retrofit.Builder()
         .baseUrl(trackBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     private val trackService = retrofit.create(TrackApi::class.java)
-    private val tracks = ArrayList<Track>()
+    private val tracks = mutableListOf<Track>()
     private var constTextEdit: String = TEXT_EDIT_VALUE
     private lateinit var inputEditText: EditText
     private lateinit var trackList: RecyclerView
@@ -46,7 +47,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var errorNoData: LinearLayout
     private lateinit var updateButton: Button
 
-    val adapter = TrackAdapter()
+    private val adapter = TrackAdapter()
 
     private var constIsClearButtonVisible: Int = 8
 
@@ -137,21 +138,20 @@ class SearchActivity : AppCompatActivity() {
                         call: Call<TrackResponse?>,
                         response: Response<TrackResponse?>
                     ) {
-                        when (response.code()) {
-                            200 -> {
-                                if (response.body()?.results?.isNotEmpty() == true) {
-                                    tracks.clear()
-                                    tracks.addAll(response.body()?.results!!)
-                                    adapter.notifyDataSetChanged()
-                                    showSearchResults()
-                                } else {
-                                    tracks.clear()
-                                    adapter.notifyDataSetChanged()
-                                }
+                        if (response.isSuccessful) {
+                            val resp = response.body()?.results.orEmpty()
+                            if (resp.isNotEmpty()) {
+                                tracks.clear()
+                                tracks.addAll(resp)
+                                adapter.notifyDataSetChanged()
+                                showSearchResults()
+                            } else {
+                                tracks.clear()
+                                adapter.notifyDataSetChanged()
+                            }
 
-                                if (tracks.isEmpty()) {
-                                    showErrorNoData()
-                                }
+                            if (tracks.isEmpty()) {
+                                showErrorNoData()
                             }
                         }
                     }

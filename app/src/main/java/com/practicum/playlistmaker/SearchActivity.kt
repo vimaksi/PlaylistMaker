@@ -19,9 +19,11 @@ import androidx.core.view.WindowInsetsCompat
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
+import androidx.core.view.isGone
+
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Visibility
 import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,24 +32,28 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 const val trackBaseUrl = "https://itunes.apple.com/"
+const val SEARCH_TRACK_HISTORY_KEY = "searchTrackHistory"
 
 class SearchActivity : AppCompatActivity() {
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(trackBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    private val retrofit =
+        Retrofit.Builder().baseUrl(trackBaseUrl).addConverterFactory(GsonConverterFactory.create())
+            .build()
 
     private val trackService = retrofit.create(TrackApi::class.java)
     private val tracks = mutableListOf<Track>()
     private var constTextEdit: String = TEXT_EDIT_VALUE
     private lateinit var inputEditText: EditText
     private lateinit var trackList: RecyclerView
+    private lateinit var trackListSearch: RecyclerView
     private lateinit var errorNoInternet: LinearLayout
     private lateinit var errorNoData: LinearLayout
     private lateinit var updateButton: Button
+    private lateinit var clearHistoryButton: Button
 
     private val adapter = TrackAdapter()
+    private val historyAdapter = TrackAdapter()
+
 
     private var constIsClearButtonVisible: Int = 8
 
@@ -55,7 +61,9 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val sharedPreferences = getSharedPreferences(PM_PREFERENCES, MODE_PRIVATE)
         //enableEdgeToEdge()
+        val searchHistory = SearchHistory(sharedPreferences)
         setContentView(R.layout.activity_search)
 
         if (savedInstanceState != null) {
@@ -78,19 +86,29 @@ class SearchActivity : AppCompatActivity() {
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
         inputEditText = findViewById(R.id.inputEditText)
         trackList = findViewById(R.id.recyclerView)
+        trackListSearch = findViewById(R.id.recyclerHistoryView)
         errorNoInternet = findViewById(R.id.errorInternet)
         errorNoData = findViewById(R.id.errorNoData)
         updateButton = findViewById(R.id.updateButton)
+        clearHistoryButton = findViewById(R.id.clearButton)
+        val historyLayout = findViewById<LinearLayout>(R.id.historyLinearLayout)
 
         adapter.tracks = tracks
+
+        adapter.onTrackClick = { track ->
+            searchHistory.addTrack(track)
+            val history = searchHistory.getHistory()
+            historyAdapter.tracks = history
+            historyAdapter.notifyDataSetChanged()
+        }
 
         errorNoInternet.visibility = View.GONE
         errorNoData.visibility = View.GONE
         trackList.visibility = View.GONE
 
-        trackList.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        trackList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         trackList.adapter = adapter
+        trackListSearch.adapter = historyAdapter
 
         inputEditText.setText(constTextEdit.toString())
         clearButton.visibility = constIsClearButtonVisible
@@ -102,6 +120,7 @@ class SearchActivity : AppCompatActivity() {
             errorNoData.visibility = View.GONE
             trackList.visibility = View.GONE
         }
+
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -110,6 +129,8 @@ class SearchActivity : AppCompatActivity() {
                 constTextEdit = inputEditText.text.toString()
                 clearButton.visibility = clearButtonVisibility(s)
                 constIsClearButtonVisible = clearButton.visibility
+                historyLayout.visibility =
+                    if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -119,6 +140,24 @@ class SearchActivity : AppCompatActivity() {
 
         updateButton.setOnClickListener {
             search()
+        }
+
+        clearHistoryButton.setOnClickListener {
+            searchHistory.clear()
+            val history = searchHistory.getHistory()
+            historyAdapter.tracks = history
+            historyAdapter.notifyDataSetChanged()
+            historyLayout.visibility = View.GONE
+        }
+
+
+        inputEditText.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus && inputEditText.text.isEmpty()) {
+                historyLayout.visibility = View.VISIBLE
+                val history = searchHistory.getHistory()
+                historyAdapter.tracks = history
+                historyAdapter.notifyDataSetChanged()
+            } else historyLayout.visibility = View.GONE
         }
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
@@ -135,8 +174,7 @@ class SearchActivity : AppCompatActivity() {
             trackService.search(inputEditText.text.toString())
                 .enqueue(object : Callback<TrackResponse> {
                     override fun onResponse(
-                        call: Call<TrackResponse?>,
-                        response: Response<TrackResponse?>
+                        call: Call<TrackResponse?>, response: Response<TrackResponse?>
                     ) {
                         if (response.isSuccessful) {
                             val resp = response.body()?.results.orEmpty()

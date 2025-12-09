@@ -2,14 +2,13 @@ package com.practicum.playlistmaker
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import java.lang.Boolean.getBoolean
-import kotlin.apply
 
 const val PM_PREFERENCES = "playlistmaker"
 const val DARK_THEME_KEY = "darkTheme"
 
 class App : Application() {
     var darkTheme: Boolean = false
+
 
     override fun onCreate() {
         super.onCreate()

@@ -105,6 +105,7 @@ class SearchActivity : AppCompatActivity() {
         errorNoInternet.visibility = View.GONE
         errorNoData.visibility = View.GONE
         trackList.visibility = View.GONE
+        historyLayout.visibility = View.GONE
 
         trackList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         trackList.adapter = adapter
@@ -119,6 +120,10 @@ class SearchActivity : AppCompatActivity() {
             errorNoInternet.visibility = View.GONE
             errorNoData.visibility = View.GONE
             trackList.visibility = View.GONE
+            if (searchHistory.getHistory().isNotEmpty()) {
+                historyLayout.visibility = View.VISIBLE
+            } else
+                historyLayout.visibility = View.GONE
         }
 
         val simpleTextWatcher = object : TextWatcher {

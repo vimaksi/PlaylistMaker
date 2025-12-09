@@ -135,7 +135,7 @@ class SearchActivity : AppCompatActivity() {
                 clearButton.visibility = clearButtonVisibility(s)
                 constIsClearButtonVisible = clearButton.visibility
                 historyLayout.visibility =
-                    if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
+                    if (inputEditText.hasFocus() && s?.isEmpty() == true && searchHistory.getHistory().isNotEmpty()) View.VISIBLE else View.GONE
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -157,7 +157,7 @@ class SearchActivity : AppCompatActivity() {
 
 
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus && inputEditText.text.isEmpty()) {
+            if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getHistory().isNotEmpty()) {
                 historyLayout.visibility = View.VISIBLE
                 val history = searchHistory.getHistory()
                 historyAdapter.tracks = history

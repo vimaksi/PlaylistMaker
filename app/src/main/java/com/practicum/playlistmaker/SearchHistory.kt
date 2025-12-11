@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import java.util.Collections.emptyList
 
 
-const val MAX_SIZE = 10
+private const val MAX_SIZE = 10
 
 class SearchHistory (val sharedPreferences: SharedPreferences){
     fun getHistory() : MutableList<Track> {

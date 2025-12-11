@@ -62,7 +62,6 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val sharedPreferences = getSharedPreferences(PM_PREFERENCES, MODE_PRIVATE)
-        //enableEdgeToEdge()
         val searchHistory = SearchHistory(sharedPreferences)
         setContentView(R.layout.activity_search)
 

@@ -56,7 +56,7 @@
             android:layout_marginHorizontal="24dp"
             android:layout_marginVertical="102dp"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
             <TextView
                 android:text="@string/problem_with_internet"
                 app:drawableTopCompat="@drawable/ic_ph_no_internet_120"
@@ -64,20 +64,8 @@
 
             <Button
                 android:id="@+id/updateButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginVertical="24dp"
-                android:backgroundTint="?attr/buttonUpdateTint"
-                android:fontFamily="@font/ys_display_medium"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="10dp"
-                android:text="@string/update"
-                android:textAllCaps="false"
-                android:textColor="?attr/buttonUpdateText"
-                android:textFontWeight="500"
-                android:textSize="14sp"
-                app:cornerRadius="54dp"/>
+                style="@style/ButtonSearchStyle"
+                android:text="@string/update" />
         </LinearLayout>
 
         <LinearLayout
@@ -93,6 +81,29 @@
                 android:text="@string/not_found"
                 app:drawableTopCompat="@drawable/ic_ph_no_found_120"
                 style="@style/TextViewErrorStyle"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/historyLinearLayout"
+            android:orientation="vertical"
+            android:visibility="visible">
+            <TextView
+                android:text="@string/you_find"
+                style="@style/TextViewErrorStyle"
+                android:paddingTop="24dp"
+                android:paddingBottom="8dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerHistoryView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="@dimen/padding_medium"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            <Button
+                android:id="@+id/clearButton"
+                style="@style/ButtonSearchStyle"
+                android:text="@string/clear_history"/>
         </LinearLayout>
     </FrameLayout>
 </LinearLayout>

@@ -1,7 +1,9 @@
 package com.practicum.playlistmaker
 
+import android.R.attr.track
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.Layout
@@ -18,13 +20,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.core.view.isGone
-
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.Visibility
-import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -99,6 +96,16 @@ class SearchActivity : AppCompatActivity() {
             val history = searchHistory.getHistory()
             historyAdapter.tracks = history
             historyAdapter.notifyDataSetChanged()
+
+            val audioPlayerIntent = Intent(this, AudioPlayer::class.java)
+            audioPlayerIntent.putExtra(AudioPlayer.TRACK_EXTRA,track)
+            startActivity(audioPlayerIntent)
+        }
+
+        historyAdapter.onTrackClick = { track ->
+            val audioPlayerIntent = Intent(this, AudioPlayer::class.java)
+            audioPlayerIntent.putExtra(AudioPlayer.TRACK_EXTRA,track)
+            startActivity(audioPlayerIntent)
         }
 
         errorNoInternet.visibility = View.GONE

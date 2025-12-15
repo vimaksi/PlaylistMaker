@@ -11,9 +11,13 @@
     <dimen name="padding_small_8">8dp</dimen>
     <dimen name="padding_small">14dp</dimen>
     <dimen name="padding_medium">16dp</dimen>
+    <dimen name="margin_top_17">17dp</dimen>
+    <dimen name="margin_12">12dp</dimen>
 
     <dimen name="text_size_11">11sp</dimen>
     <dimen name="text_size_small">16sp</dimen>
+    <dimen name="text_size_13">13sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_medium">22sp</dimen>
 
     <dimen name="minHeight">61dp</dimen>

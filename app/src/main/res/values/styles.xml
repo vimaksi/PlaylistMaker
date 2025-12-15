@@ -93,4 +93,25 @@
         <item name="android:paddingTop">24dp</item>
         <item name="android:layout_marginVertical">24dp</item>
     </style>
+    <style name="TextViewAudioPlayer">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:layout_marginTop">@dimen/margin_top_17</item>
+    </style>
+    <style name="TextViewAudioPlayerTrack" parent="TextViewAudioPlayer">
+        <item name="android:textColor">?attr/colorControlNormal</item>
+    </style>
+    <style name="ImageViewAudioPlayer">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">54dp</item>
+        <item name="android:background">@drawable/round_button</item>
+        <item name="android:backgroundTint">@color/black_light</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="tint">@color/white</item>
+    </style>
 </resources>

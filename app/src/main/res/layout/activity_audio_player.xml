@@ -3,9 +3,9 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/main">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,27 +24,28 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_end="@dimen/padding_medium" />
+
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/menu_button"
             style="@style/ToolbarStyle"
-            app:title=" "
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:title=" " />
 
         <ImageView
             android:id="@+id/imageAlbum"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="1:1"
             android:layout_marginHorizontal="@dimen/padding_small_8"
-            app:layout_constraintWidth_max="512dp"
-            app:layout_constraintHeight_max="512dp"
             android:layout_marginTop="26dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_placeholder_312"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toStartOf="@id/rightBorder"
+            app:layout_constraintHeight_max="512dp"
             app:layout_constraintStart_toEndOf="@id/leftBorder"
-            app:layout_constraintTop_toBottomOf="@id/menu_button"/>
+            app:layout_constraintTop_toBottomOf="@id/menu_button"
+            app:layout_constraintWidth_max="512dp" />
 
         <TextView
             android:id="@+id/trackName"
@@ -100,6 +101,18 @@
             app:tint="?attr/colorControlNormal" />
 
         <ImageView
+            android:id="@+id/pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="38.33dp"
+            android:src="@drawable/ic_pause_83"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@id/like"
+            app:layout_constraintStart_toEndOf="@id/add_to_pl"
+            app:layout_constraintTop_toBottomOf="@id/trackArtist"
+            app:tint="?attr/colorControlNormal" />
+
+        <ImageView
             android:id="@+id/like"
             style="@style/ImageViewAudioPlayer"
             android:layout_marginEnd="@dimen/padding_small_8"
@@ -110,6 +123,13 @@
             app:layout_constraintStart_toEndOf="@+id/play"
             app:layout_constraintTop_toBottomOf="@id/trackArtist" />
 
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/playPauseBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="play,pause" />
+
         <TextView
             android:id="@+id/trackTimeCurrent"
             android:layout_width="0dp"
@@ -119,13 +139,13 @@
             android:layout_marginBottom="12.33dp"
             android:fontFamily="@font/ys_display_medium"
             android:gravity="center"
+            android:text="00:00"
             android:textColor="?attr/colorControlNormal"
             android:textFontWeight="500"
             android:textSize="@dimen/text_size_14"
-            app:layout_constraintEnd_toEndOf="@id/play"
-            app:layout_constraintStart_toStartOf="@id/play"
-            app:layout_constraintTop_toBottomOf="@id/play"
-            android:text="0:30"/>
+            app:layout_constraintEnd_toEndOf="@id/like"
+            app:layout_constraintStart_toStartOf="@id/add_to_pl"
+            app:layout_constraintTop_toBottomOf="@id/playPauseBarrier" />
 
         <TextView
             android:id="@+id/time"
@@ -179,9 +199,9 @@
             style="@style/TextViewAudioPlayerTrack"
             android:layout_marginTop="39dp"
             android:text="@string/time_name"
-            tools:text="@string/time_track"
             app:layout_constraintEnd_toEndOf="@id/rightBorder"
-            app:layout_constraintTop_toBottomOf="@id/trackTimeCurrent" />
+            app:layout_constraintTop_toBottomOf="@id/trackTimeCurrent"
+            tools:text="@string/time_track" />
 
         <TextView
             android:id="@+id/trackAlbum"

@@ -57,6 +57,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var updateButton: Button
     private lateinit var clearHistoryButton: Button
     private lateinit var progressBar: ProgressBar
+    private lateinit var historyLayout: LinearLayout
 
     private val adapter = TrackAdapter()
     private val historyAdapter = TrackAdapter()
@@ -98,7 +99,7 @@ class SearchActivity : AppCompatActivity() {
         updateButton = findViewById(R.id.updateButton)
         clearHistoryButton = findViewById(R.id.clearButton)
         progressBar = findViewById(R.id.progressBar)
-        val historyLayout = findViewById<LinearLayout>(R.id.historyLinearLayout)
+        historyLayout = findViewById(R.id.historyLinearLayout)
 
         adapter.tracks = tracks
 
@@ -120,10 +121,7 @@ class SearchActivity : AppCompatActivity() {
             startActivity(audioPlayerIntent)
         }
 
-        errorNoInternet.visibility = View.GONE
-        errorNoData.visibility = View.GONE
-        trackList.visibility = View.GONE
-        historyLayout.visibility = View.GONE
+       hideData()
 
         trackList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         trackList.adapter = adapter
@@ -200,6 +198,7 @@ class SearchActivity : AppCompatActivity() {
     private fun search() {
         if (inputEditText.text.isNotEmpty()) {
             progressBar.visibility = View.VISIBLE
+            hideData()
             trackService.search(inputEditText.text.toString())
                 .enqueue(object : Callback<TrackResponse> {
                     override fun onResponse(
@@ -276,6 +275,12 @@ class SearchActivity : AppCompatActivity() {
         progressBar.visibility = View.GONE
     }
 
+    private fun hideData(){
+        errorNoInternet.visibility = View.GONE
+        errorNoData.visibility = View.GONE
+        trackList.visibility = View.GONE
+        historyLayout.visibility = View.GONE
+    }
     private fun closeKeyboard() {
         this.currentFocus?.let { view ->
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager

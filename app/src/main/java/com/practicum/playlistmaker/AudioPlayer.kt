@@ -28,10 +28,6 @@ class AudioPlayer : AppCompatActivity(R.layout.activity_audio_player) {
     private lateinit var play: ImageView
     private lateinit var pause: ImageView
     private lateinit var trackTimeCurrent: TextView
-    private var sec: Long = 0
-    private var millis: Long = 0
-    private var now: Long = 0
-    private var timeEnd: Long = 0
     private var mainThreadHandler: Handler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

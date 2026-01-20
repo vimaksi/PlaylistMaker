@@ -121,7 +121,7 @@ class SearchActivity : AppCompatActivity() {
             startActivity(audioPlayerIntent)
         }
 
-       hideData()
+        hideData()
 
         trackList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         trackList.adapter = adapter
@@ -151,10 +151,13 @@ class SearchActivity : AppCompatActivity() {
                 constTextEdit = inputEditText.text.toString()
                 clearButton.visibility = clearButtonVisibility(s)
                 constIsClearButtonVisible = clearButton.visibility
-                historyLayout.visibility =
-                    if (inputEditText.hasFocus() && s?.isEmpty() == true && searchHistory.getHistory()
-                            .isNotEmpty()
-                    ) View.VISIBLE else View.GONE
+
+                if (inputEditText.hasFocus() && s?.isEmpty() == true && searchHistory.getHistory()
+                        .isNotEmpty()
+                )
+                    showHistory()
+                else
+                    historyLayout.visibility = View.GONE
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -174,18 +177,18 @@ class SearchActivity : AppCompatActivity() {
             historyLayout.visibility = View.GONE
         }
 
-
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getHistory()
                     .isNotEmpty()
             ) {
-                historyLayout.visibility = View.VISIBLE
+                showHistory()
                 val history = searchHistory.getHistory()
                 historyAdapter.tracks = history
                 historyAdapter.notifyDataSetChanged()
             } else historyLayout.visibility = View.GONE
         }
 
+        //реакция на нажатие DONE
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 search()
@@ -257,7 +260,16 @@ class SearchActivity : AppCompatActivity() {
         errorNoData.visibility = View.GONE
         progressBar.visibility = View.GONE
         trackList.visibility = View.VISIBLE
+        historyLayout.visibility = View.GONE
         closeKeyboard()
+    }
+
+    private fun showHistory() {
+        errorNoInternet.visibility = View.GONE
+        errorNoData.visibility = View.GONE
+        progressBar.visibility = View.GONE
+        trackList.visibility = View.GONE
+        historyLayout.visibility = View.VISIBLE
     }
 
     private fun showErrorNoInternet() {
@@ -275,12 +287,13 @@ class SearchActivity : AppCompatActivity() {
         progressBar.visibility = View.GONE
     }
 
-    private fun hideData(){
+    private fun hideData() {
         errorNoInternet.visibility = View.GONE
         errorNoData.visibility = View.GONE
         trackList.visibility = View.GONE
         historyLayout.visibility = View.GONE
     }
+
     private fun closeKeyboard() {
         this.currentFocus?.let { view ->
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager

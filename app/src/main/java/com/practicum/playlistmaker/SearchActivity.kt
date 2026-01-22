@@ -5,6 +5,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.Layout
 import android.text.TextWatcher
@@ -20,8 +22,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Runnable
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,6 +43,11 @@ class SearchActivity : AppCompatActivity() {
 
     private val trackService = retrofit.create(TrackApi::class.java)
     private val tracks = mutableListOf<Track>()
+
+    private var isClickAllowed = true
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val searchRunnable = Runnable { search() }
     private var constTextEdit: String = TEXT_EDIT_VALUE
     private lateinit var inputEditText: EditText
     private lateinit var trackList: RecyclerView
@@ -47,6 +56,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var errorNoData: LinearLayout
     private lateinit var updateButton: Button
     private lateinit var clearHistoryButton: Button
+    private lateinit var progressBar: ProgressBar
+    private lateinit var historyLayout: LinearLayout
 
     private val adapter = TrackAdapter()
     private val historyAdapter = TrackAdapter()
@@ -87,7 +98,8 @@ class SearchActivity : AppCompatActivity() {
         errorNoData = findViewById(R.id.errorNoData)
         updateButton = findViewById(R.id.updateButton)
         clearHistoryButton = findViewById(R.id.clearButton)
-        val historyLayout = findViewById<LinearLayout>(R.id.historyLinearLayout)
+        progressBar = findViewById(R.id.progressBar)
+        historyLayout = findViewById(R.id.historyLinearLayout)
 
         adapter.tracks = tracks
 
@@ -96,22 +108,20 @@ class SearchActivity : AppCompatActivity() {
             val history = searchHistory.getHistory()
             historyAdapter.tracks = history
             historyAdapter.notifyDataSetChanged()
-
-            val audioPlayerIntent = Intent(this, AudioPlayer::class.java)
-            audioPlayerIntent.putExtra(AudioPlayer.TRACK_EXTRA,track)
-            startActivity(audioPlayerIntent)
+            if (clickDebounce()) {
+                val audioPlayerIntent = Intent(this, AudioPlayer::class.java)
+                audioPlayerIntent.putExtra(AudioPlayer.TRACK_EXTRA, track)
+                startActivity(audioPlayerIntent)
+            }
         }
 
         historyAdapter.onTrackClick = { track ->
             val audioPlayerIntent = Intent(this, AudioPlayer::class.java)
-            audioPlayerIntent.putExtra(AudioPlayer.TRACK_EXTRA,track)
+            audioPlayerIntent.putExtra(AudioPlayer.TRACK_EXTRA, track)
             startActivity(audioPlayerIntent)
         }
 
-        errorNoInternet.visibility = View.GONE
-        errorNoData.visibility = View.GONE
-        trackList.visibility = View.GONE
-        historyLayout.visibility = View.GONE
+        hideData()
 
         trackList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         trackList.adapter = adapter
@@ -137,11 +147,17 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                searchDebounce()
                 constTextEdit = inputEditText.text.toString()
                 clearButton.visibility = clearButtonVisibility(s)
                 constIsClearButtonVisible = clearButton.visibility
-                historyLayout.visibility =
-                    if (inputEditText.hasFocus() && s?.isEmpty() == true && searchHistory.getHistory().isNotEmpty()) View.VISIBLE else View.GONE
+
+                if (inputEditText.hasFocus() && s?.isEmpty() == true && searchHistory.getHistory()
+                        .isNotEmpty()
+                )
+                    showHistory()
+                else
+                    historyLayout.visibility = View.GONE
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -161,16 +177,18 @@ class SearchActivity : AppCompatActivity() {
             historyLayout.visibility = View.GONE
         }
 
-
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getHistory().isNotEmpty()) {
-                historyLayout.visibility = View.VISIBLE
+            if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getHistory()
+                    .isNotEmpty()
+            ) {
+                showHistory()
                 val history = searchHistory.getHistory()
                 historyAdapter.tracks = history
                 historyAdapter.notifyDataSetChanged()
             } else historyLayout.visibility = View.GONE
         }
 
+        //реакция на нажатие DONE
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 search()
@@ -182,6 +200,8 @@ class SearchActivity : AppCompatActivity() {
 
     private fun search() {
         if (inputEditText.text.isNotEmpty()) {
+            progressBar.visibility = View.VISIBLE
+            hideData()
             trackService.search(inputEditText.text.toString())
                 .enqueue(object : Callback<TrackResponse> {
                     override fun onResponse(
@@ -238,14 +258,25 @@ class SearchActivity : AppCompatActivity() {
         // Скрываем placeholder и показываем результаты
         errorNoInternet.visibility = View.GONE
         errorNoData.visibility = View.GONE
+        progressBar.visibility = View.GONE
         trackList.visibility = View.VISIBLE
+        historyLayout.visibility = View.GONE
         closeKeyboard()
+    }
+
+    private fun showHistory() {
+        errorNoInternet.visibility = View.GONE
+        errorNoData.visibility = View.GONE
+        progressBar.visibility = View.GONE
+        trackList.visibility = View.GONE
+        historyLayout.visibility = View.VISIBLE
     }
 
     private fun showErrorNoInternet() {
         errorNoInternet.visibility = View.VISIBLE
         errorNoData.visibility = View.GONE
         trackList.visibility = View.GONE
+        progressBar.visibility = View.GONE
         closeKeyboard()
     }
 
@@ -253,6 +284,14 @@ class SearchActivity : AppCompatActivity() {
         errorNoInternet.visibility = View.GONE
         errorNoData.visibility = View.VISIBLE
         trackList.visibility = View.GONE
+        progressBar.visibility = View.GONE
+    }
+
+    private fun hideData() {
+        errorNoInternet.visibility = View.GONE
+        errorNoData.visibility = View.GONE
+        trackList.visibility = View.GONE
+        historyLayout.visibility = View.GONE
     }
 
     private fun closeKeyboard() {
@@ -262,9 +301,31 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(searchRunnable)
+        //отменяем активные запросы при выходе из экрана
+    }
+
     companion object {
         private const val EDIT_TEXT = "EDIT_TEXT"
         private const val TEXT_EDIT_VALUE = ""
         private const val IS_VISIBLE_BUTTON = "IS_VISIBLE_BUTTON"
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }

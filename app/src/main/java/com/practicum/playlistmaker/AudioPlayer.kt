@@ -172,7 +172,7 @@ class AudioPlayer : AppCompatActivity(R.layout.activity_audio_player) {
             pause.visibility = View.GONE
             play.visibility = View.VISIBLE
             mainThreadHandler?.removeCallbacks(refreshStopWatch)
-            trackTimeCurrent.text = "00:00"
+            trackTimeCurrent.text = SimpleDateFormat("mm:ss",Locale.getDefault()).format(0)
         }
     }
 

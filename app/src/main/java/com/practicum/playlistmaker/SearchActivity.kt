@@ -315,6 +315,12 @@ class SearchActivity : AppCompatActivity() {
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(searchRunnable)
+        //отменяем активные запросы при выходе из экрана
+    }
+
     companion object {
         private const val EDIT_TEXT = "EDIT_TEXT"
         private const val TEXT_EDIT_VALUE = ""

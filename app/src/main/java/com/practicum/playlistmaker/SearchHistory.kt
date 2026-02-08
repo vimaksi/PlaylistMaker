@@ -1,13 +1,14 @@
 package com.practicum.playlistmaker
 
-import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.ui.tracks.SEARCH_TRACK_HISTORY_KEY
 import java.util.Collections.emptyList
 
 
-private const val MAX_SIZE = 10
 
+private const val MAX_SIZE = 10
 class SearchHistory (val sharedPreferences: SharedPreferences){
     fun getHistory() : MutableList<Track> {
         val json = sharedPreferences.getString(SEARCH_TRACK_HISTORY_KEY,null)
@@ -25,11 +26,10 @@ class SearchHistory (val sharedPreferences: SharedPreferences){
         sharedPreferences.edit()
             .putString(SEARCH_TRACK_HISTORY_KEY, createJsonFromHistory(list))
             .apply()
-
     }
 
     fun clear() {
-        sharedPreferences.edit().remove(SEARCH_TRACK_HISTORY_KEY).apply()
+        sharedPreferences.edit().remove(SEARCH_TRACK_HISTORY_KEY).apply()//??
     }
 
     private fun createJsonFromHistory(history: List<Track>): String {

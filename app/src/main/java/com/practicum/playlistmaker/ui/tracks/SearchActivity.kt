@@ -1,21 +1,17 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui.tracks
 
-import android.R.attr.track
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
-import android.text.Layout
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
@@ -25,23 +21,18 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.Runnable
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-
-const val trackBaseUrl = "https://itunes.apple.com/"
+import com.practicum.playlistmaker.ui.audioplayer.AudioPlayer
+//import com.practicum.playlistmaker.PM_PREFERENCES
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.SearchHistory
+import com.practicum.playlistmaker.domain.Creator
+import com.practicum.playlistmaker.domain.api.TracksInteractor
+import com.practicum.playlistmaker.domain.models.Track
+const val PM_PREFERENCES = "playlistmaker"
 const val SEARCH_TRACK_HISTORY_KEY = "searchTrackHistory"
 
 class SearchActivity : AppCompatActivity() {
 
-    private val retrofit =
-        Retrofit.Builder().baseUrl(trackBaseUrl).addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-    private val trackService = retrofit.create(TrackApi::class.java)
     private val tracks = mutableListOf<Track>()
 
     private var isClickAllowed = true
@@ -58,19 +49,19 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var clearHistoryButton: Button
     private lateinit var progressBar: ProgressBar
     private lateinit var historyLayout: LinearLayout
-
+    private lateinit var loadTracksInteractor: TracksInteractor
     private val adapter = TrackAdapter()
     private val historyAdapter = TrackAdapter()
-
-
     private var constIsClearButtonVisible: Int = 8
 
     @SuppressLint("MissingInflatedId")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val sharedPreferences = getSharedPreferences(PM_PREFERENCES, MODE_PRIVATE)
-        val searchHistory = SearchHistory(sharedPreferences)
+        val sharedPreferences = getSharedPreferences(PM_PREFERENCES, MODE_PRIVATE)//?
+        val searchHistory = SearchHistory(sharedPreferences)//?
+
+        loadTracksInteractor = Creator.provideTracksInteractor()
         setContentView(R.layout.activity_search)
 
         if (savedInstanceState != null) {
@@ -110,14 +101,14 @@ class SearchActivity : AppCompatActivity() {
             historyAdapter.notifyDataSetChanged()
             if (clickDebounce()) {
                 val audioPlayerIntent = Intent(this, AudioPlayer::class.java)
-                audioPlayerIntent.putExtra(AudioPlayer.TRACK_EXTRA, track)
+                audioPlayerIntent.putExtra(AudioPlayer.Companion.TRACK_EXTRA, track)
                 startActivity(audioPlayerIntent)
             }
         }
 
         historyAdapter.onTrackClick = { track ->
             val audioPlayerIntent = Intent(this, AudioPlayer::class.java)
-            audioPlayerIntent.putExtra(AudioPlayer.TRACK_EXTRA, track)
+            audioPlayerIntent.putExtra(AudioPlayer.Companion.TRACK_EXTRA, track)
             startActivity(audioPlayerIntent)
         }
 
@@ -170,20 +161,20 @@ class SearchActivity : AppCompatActivity() {
         }
 
         clearHistoryButton.setOnClickListener {
-            searchHistory.clear()
-            val history = searchHistory.getHistory()
+            searchHistory.clear()//??
+            val history = searchHistory.getHistory()//??
             historyAdapter.tracks = history
             historyAdapter.notifyDataSetChanged()
             historyLayout.visibility = View.GONE
         }
 
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getHistory()
+            if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getHistory()//??
                     .isNotEmpty()
             ) {
                 showHistory()
-                val history = searchHistory.getHistory()
-                historyAdapter.tracks = history
+                val history = searchHistory.getHistory()///??
+                historyAdapter.tracks = history //??
                 historyAdapter.notifyDataSetChanged()
             } else historyLayout.visibility = View.GONE
         }
@@ -202,33 +193,31 @@ class SearchActivity : AppCompatActivity() {
         if (inputEditText.text.isNotEmpty()) {
             progressBar.visibility = View.VISIBLE
             hideData()
-            trackService.search(inputEditText.text.toString())
-                .enqueue(object : Callback<TrackResponse> {
-                    override fun onResponse(
-                        call: Call<TrackResponse?>, response: Response<TrackResponse?>
-                    ) {
-                        if (response.isSuccessful) {
-                            val resp = response.body()?.results.orEmpty()
-                            if (resp.isNotEmpty()) {
-                                tracks.clear()
-                                tracks.addAll(resp)
-                                adapter.notifyDataSetChanged()
-                                showSearchResults()
-                            } else {
-                                tracks.clear()
-                                adapter.notifyDataSetChanged()
-                            }
 
-                            if (tracks.isEmpty()) {
-                                showErrorNoData()
+            loadTracksInteractor.searchTracks(
+                inputEditText.text.toString(),
+                object : TracksInteractor.TracksConsumer {
+                    override fun consume(result: Result<List<Track>>) {
+                        runOnUiThread {
+                            result.onSuccess { foundTracks ->
+                                if (foundTracks.isEmpty()) {
+                                    tracks.clear()
+                                    adapter.notifyDataSetChanged()
+                                    showErrorNoData()
+                                } else {
+                                    tracks.clear()
+                                    tracks.addAll(foundTracks)
+                                    adapter.notifyDataSetChanged()
+                                    showSearchResults()
+                                }
                             }
+                                .onFailure {
+                                    tracks.clear()
+                                    showErrorNoInternet()
+                                    adapter.notifyDataSetChanged()
+
+                                }
                         }
-                    }
-
-                    override fun onFailure(call: Call<TrackResponse?>, t: Throwable) {
-                        tracks.clear()
-                        adapter.notifyDataSetChanged()
-                        showErrorNoInternet()
                     }
                 })
         }
@@ -296,7 +285,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun closeKeyboard() {
         this.currentFocus?.let { view ->
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
             imm?.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }

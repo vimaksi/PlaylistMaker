@@ -1,15 +1,20 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui.settings
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.switchmaterial.SwitchMaterial
-class  SettingsActivity : AppCompatActivity() {
+import com.practicum.playlistmaker.App
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.domain.Creator
+
+class SettingsActivity : AppCompatActivity() {
+    private val settingsInteractor by lazy { Creator.provideSettingsInteractor(applicationContext) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +31,7 @@ class  SettingsActivity : AppCompatActivity() {
 
         val main = findViewById<Toolbar>(R.id.back_to_main)
 
-        main.setOnClickListener{
+        main.setOnClickListener {
             finish()
         }
 
@@ -34,8 +39,8 @@ class  SettingsActivity : AppCompatActivity() {
         message.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_TEXT,getString(R.string.link_android_developer))
-            startActivity(Intent.createChooser(shareIntent,getString(R.string.share_with)))
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.link_android_developer))
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_with)))
         }
 
         val send = findViewById<TextView>(R.id.write_support)
@@ -43,7 +48,7 @@ class  SettingsActivity : AppCompatActivity() {
             val sendIntent = Intent(Intent.ACTION_SENDTO)
             sendIntent.data = Uri.parse(getString(R.string.mail_to))
             sendIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.recipient)))
-            sendIntent.putExtra(Intent.EXTRA_SUBJECT,getString(R.string.letters_theme))
+            sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.letters_theme))
             sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.letter_text))
             startActivity(sendIntent)
         }
@@ -56,10 +61,9 @@ class  SettingsActivity : AppCompatActivity() {
 
         val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
 
-        val sharedPrefs = getSharedPreferences(PM_PREFERENCES, MODE_PRIVATE)
-
-        themeSwitcher.isChecked = sharedPrefs.getBoolean(DARK_THEME_KEY,false)
+        themeSwitcher.isChecked = settingsInteractor.isDarkThemeEnabled()
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            settingsInteractor.setDarkTheme(checked)
             (applicationContext as App).switchTheme(checked)
         }
     }

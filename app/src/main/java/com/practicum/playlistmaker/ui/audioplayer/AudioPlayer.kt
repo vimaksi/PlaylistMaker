@@ -1,24 +1,24 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui.audioplayer
 
-import android.content.Context
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.TypedValue
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
-import android.os.Handler
-import android.os.Looper
 
 class AudioPlayer : AppCompatActivity(R.layout.activity_audio_player) {
 
@@ -66,7 +66,7 @@ class AudioPlayer : AppCompatActivity(R.layout.activity_audio_player) {
         }
 
         val track: Track? =
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 intent.getParcelableExtra(TRACK_EXTRA, Track::class.java)
             } else {
                 @Suppress("DEPRECATION")
@@ -172,7 +172,7 @@ class AudioPlayer : AppCompatActivity(R.layout.activity_audio_player) {
             pause.visibility = View.GONE
             play.visibility = View.VISIBLE
             mainThreadHandler?.removeCallbacks(refreshStopWatch)
-            trackTimeCurrent.text = SimpleDateFormat("mm:ss",Locale.getDefault()).format(0)
+            trackTimeCurrent.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(0)
         }
     }
 

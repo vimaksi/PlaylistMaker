@@ -1,7 +1,8 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui.tracks
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.practicum.playlistmaker.domain.models.Track
 
 class TrackAdapter () : RecyclerView.Adapter<TrackViewHolder>() {
     var onTrackClick: ((Track) -> Unit)? = null

@@ -22,17 +22,13 @@ import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.ui.audioplayer.AudioPlayer
-//import com.practicum.playlistmaker.PM_PREFERENCES
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.SearchHistory
 import com.practicum.playlistmaker.domain.Creator
 import com.practicum.playlistmaker.domain.api.TracksInteractor
 import com.practicum.playlistmaker.domain.models.Track
-const val PM_PREFERENCES = "playlistmaker"
-const val SEARCH_TRACK_HISTORY_KEY = "searchTrackHistory"
 
 class SearchActivity : AppCompatActivity() {
-
+    private val searchHistoryInteractor by lazy { Creator.provideSearchTracksInteractor(applicationContext) }
     private val tracks = mutableListOf<Track>()
 
     private var isClickAllowed = true
@@ -58,8 +54,6 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val sharedPreferences = getSharedPreferences(PM_PREFERENCES, MODE_PRIVATE)//?
-        val searchHistory = SearchHistory(sharedPreferences)//?
 
         loadTracksInteractor = Creator.provideTracksInteractor()
         setContentView(R.layout.activity_search)
@@ -95,8 +89,8 @@ class SearchActivity : AppCompatActivity() {
         adapter.tracks = tracks
 
         adapter.onTrackClick = { track ->
-            searchHistory.addTrack(track)
-            val history = searchHistory.getHistory()
+            searchHistoryInteractor.add(track)
+            val history = searchHistoryInteractor.get()
             historyAdapter.tracks = history
             historyAdapter.notifyDataSetChanged()
             if (clickDebounce()) {
@@ -127,7 +121,7 @@ class SearchActivity : AppCompatActivity() {
             errorNoInternet.visibility = View.GONE
             errorNoData.visibility = View.GONE
             trackList.visibility = View.GONE
-            if (searchHistory.getHistory().isNotEmpty()) {
+            if (searchHistoryInteractor.get().isNotEmpty()) {
                 historyLayout.visibility = View.VISIBLE
             } else
                 historyLayout.visibility = View.GONE
@@ -143,7 +137,7 @@ class SearchActivity : AppCompatActivity() {
                 clearButton.visibility = clearButtonVisibility(s)
                 constIsClearButtonVisible = clearButton.visibility
 
-                if (inputEditText.hasFocus() && s?.isEmpty() == true && searchHistory.getHistory()
+                if (inputEditText.hasFocus() && s?.isEmpty() == true && searchHistoryInteractor.get()
                         .isNotEmpty()
                 )
                     showHistory()
@@ -161,20 +155,20 @@ class SearchActivity : AppCompatActivity() {
         }
 
         clearHistoryButton.setOnClickListener {
-            searchHistory.clear()//??
-            val history = searchHistory.getHistory()//??
+            searchHistoryInteractor.clear()
+            val history = searchHistoryInteractor.get()
             historyAdapter.tracks = history
             historyAdapter.notifyDataSetChanged()
             historyLayout.visibility = View.GONE
         }
 
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getHistory()//??
+            if (hasFocus && inputEditText.text.isEmpty() && searchHistoryInteractor.get()
                     .isNotEmpty()
             ) {
                 showHistory()
-                val history = searchHistory.getHistory()///??
-                historyAdapter.tracks = history //??
+                val history = searchHistoryInteractor.get()
+                historyAdapter.tracks = history
                 historyAdapter.notifyDataSetChanged()
             } else historyLayout.visibility = View.GONE
         }

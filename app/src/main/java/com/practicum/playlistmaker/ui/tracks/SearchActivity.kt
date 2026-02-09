@@ -27,7 +27,7 @@ import com.practicum.playlistmaker.domain.Creator
 import com.practicum.playlistmaker.domain.api.TracksInteractor
 import com.practicum.playlistmaker.domain.models.Track
 
-class SearchActivity : AppCompatActivity() {
+class  SearchActivity : AppCompatActivity() {
     private val searchHistoryInteractor by lazy { Creator.provideSearchTracksInteractor(applicationContext) }
     private val tracks = mutableListOf<Track>()
 

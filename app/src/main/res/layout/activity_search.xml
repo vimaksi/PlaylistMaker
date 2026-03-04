@@ -28,7 +28,7 @@
             android:textCursorDrawable="@drawable/blue_cursor" />
 
         <ImageView
-            android:id="@+id/clearIcon"
+            android:id="@+id/clearButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
@@ -51,13 +51,14 @@
             android:visibility="gone"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/trackList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/padding_medium"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:visibility="gone"/>
         <LinearLayout
-            android:id="@+id/errorInternet"
+            android:id="@+id/errorNoInternet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="24dp"
@@ -90,25 +91,25 @@
                 style="@style/TextViewErrorStyle"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/historyLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/historyLinearLayout"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
             <TextView
                 android:text="@string/you_find"
                 style="@style/TextViewErrorStyle"
                 android:paddingTop="24dp"
                 android:paddingBottom="8dp"/>
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerHistoryView"
+                android:id="@+id/trackListSearch"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:layout_marginTop="@dimen/padding_medium"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
             <Button
-                android:id="@+id/clearButton"
+                android:id="@+id/clearHistoryButton"
                 style="@style/ButtonSearchStyle"
                 android:text="@string/clear_history"/>
         </LinearLayout>

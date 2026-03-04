@@ -2,7 +2,6 @@ package com.practicum.playlistmaker.sharing.data
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.sharing.domain.model.EmailData
 import androidx.core.net.toUri

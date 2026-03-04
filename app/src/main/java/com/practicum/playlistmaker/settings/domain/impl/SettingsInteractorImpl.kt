@@ -6,13 +6,6 @@ import com.practicum.playlistmaker.settings.domain.model.ThemeSettings
 
 class SettingsInteractorImpl(private val settingsRepository: SettingsRepository) :
     SettingsInteractor {
-    //    override fun setDarkTheme(enabled: Boolean) {
-//        settingsRepository.saveDarkTheme(enabled)
-//    }
-//
-//    override fun isDarkThemeEnabled(): Boolean {
-//        return settingsRepository.isDarkThemeEnabled()
-//    }
     override fun getThemeSettings(): ThemeSettings {
         return settingsRepository.getThemeSettings()
     }

@@ -3,7 +3,6 @@ package com.practicum.playlistmaker.creator
 import com.practicum.playlistmaker.sharing.data.ExternalNavigator
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.practicum.playlist.domain.sharing.impl.SharingInteractorImpl
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.search.data.SearchHistoryRepositoryImpl
 import com.practicum.playlistmaker.settings.data.impl.SettingsRepositoryImpl
@@ -21,7 +20,9 @@ import com.practicum.playlistmaker.settings.domain.impl.SettingsInteractorImpl
 import com.practicum.playlistmaker.player.domain.impl.TracksInteractorImpl
 import com.practicum.playlistmaker.player.domain.models.Track
 import com.practicum.playlistmaker.search.data.storage.PrefsStorageClient
+import com.practicum.playlistmaker.sharing.data.impl.SharingRepositoryImpl
 import com.practicum.playlistmaker.sharing.domain.SharingInteractor
+import com.practicum.playlistmaker.sharing.domain.impl.SharingInteractorImpl
 
 object Creator {
     private fun getTracksRepository(context: Context): TracksRepository {
@@ -41,10 +42,12 @@ object Creator {
         return SettingsInteractorImpl(getSettingsRepository(sharedPreferences))
     }
     fun provideSharingInteractor(context: Context): SharingInteractor {
-        return SharingInteractorImpl(getSharingRepository(context),context)
+        return SharingInteractorImpl(provideSharingRepository(context, provideExternalNavigator(context)))
     }
-
-    fun getSharingRepository(context: Context): ExternalNavigator {
+    fun provideSharingRepository(context: Context, externalNavigator: ExternalNavigator): SharingRepositoryImpl{
+        return SharingRepositoryImpl(context,externalNavigator)
+    }
+    fun provideExternalNavigator(context: Context): ExternalNavigator {
         return ExternalNavigator(context)
     }
 

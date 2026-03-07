@@ -13,7 +13,9 @@ plugins {
 android {
     namespace = "com.practicum.playlistmaker"
     compileSdk = 36
-
+    buildFeatures {
+        viewBinding = true
+    }
     defaultConfig {
         applicationId = "com.practicum.playlistmaker"
         minSdk = 29
@@ -58,4 +60,8 @@ dependencies {
     annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.activity.ktx)
+    implementation("io.insert-koin:koin-android:3.3.0")
 }

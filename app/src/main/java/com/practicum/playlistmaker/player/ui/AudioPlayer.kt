@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.player.ui
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
@@ -28,14 +29,6 @@ class AudioPlayer : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-//        val track: Track? = (// перенести
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//                    intent.getParcelableExtra(TRACK_EXTRA, Track::class.java)
-//                } else {
-//                    @Suppress("DEPRECATION")
-//                    intent.getParcelableExtra(TRACK_EXTRA)
-//                })
 
         if (track == null) {
             finish()

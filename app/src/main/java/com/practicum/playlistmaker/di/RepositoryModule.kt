@@ -11,16 +11,16 @@ import com.practicum.playlistmaker.sharing.domain.SharingRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single<TracksRepository>{
+    factory<TracksRepository>{
         TrackRepositoryImpl(get())
     }
-    single<SearchHistoryRepository>{
+    factory<SearchHistoryRepository>{
         SearchHistoryRepositoryImpl(get())
     }
-    single<SharingRepository>{
+    factory<SharingRepository>{
         SharingRepositoryImpl(get(),get())
     }
-    single< SettingsRepository> {
+    factory< SettingsRepository> {
         SettingsRepositoryImpl(get())
     }
 }

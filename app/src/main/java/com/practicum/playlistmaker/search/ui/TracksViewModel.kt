@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.creator.TracksApplication
 import com.practicum.playlistmaker.player.domain.api.TracksInteractor
 import com.practicum.playlistmaker.player.domain.models.Track

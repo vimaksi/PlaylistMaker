@@ -16,13 +16,6 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_settings)
-//        val settingsInteractor = Creator.provideSettingsInteractor(applicationContext)
-//        val sharingInteractor = Creator.provideSharingInteractor(applicationContext)
-//        viewModel = ViewModelProvider(
-//            this,
-//            SettingsViewModel.getFactory(sharingInteractor, settingsInteractor)
-//        )
-//            .get(SettingsViewModel::class.java)
         //подпись на отслеживание состояния темы
 
         val main = findViewById<Toolbar>(R.id.back_to_main)
@@ -64,5 +57,3 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 }
-
-

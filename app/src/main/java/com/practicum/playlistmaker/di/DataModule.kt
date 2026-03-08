@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.di
 
 import android.content.Context
+import android.media.MediaPlayer
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.player.domain.models.Track
@@ -13,7 +14,6 @@ import com.practicum.playlistmaker.settings.data.SettingsStorage
 import com.practicum.playlistmaker.settings.data.storage.SettingsStorageImpl
 import com.practicum.playlistmaker.sharing.data.ExternalNavigatorImpl
 import com.practicum.playlistmaker.sharing.data.storage.ExternalNavigator
-import com.practicum.playlistmaker.sharing.domain.SharingRepository
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -61,6 +61,5 @@ val dataModule = module {
             )
         )
     }
-
 }
 

@@ -19,8 +19,6 @@ class TracksApplication : Application(){
             modules(dataModule, repositoryModule, interactorModule, viewModelModule)
         }
 
-//        val darkTheme = Creator.provideSettingsInteractor(this).getThemeSettings().isDarkTheme
-
         val themeInteractor: SettingsInteractor = getKoin().get()
 
         switchTheme(themeInteractor.getThemeSettings().isDarkTheme)

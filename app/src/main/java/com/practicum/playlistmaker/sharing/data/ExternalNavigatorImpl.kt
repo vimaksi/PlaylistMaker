@@ -5,15 +5,16 @@ import android.content.Intent
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.sharing.domain.model.EmailData
 import androidx.core.net.toUri
+import com.practicum.playlistmaker.sharing.data.storage.ExternalNavigator
 
-class ExternalNavigator(
+class ExternalNavigatorImpl(
     private val context: Context
-) {
+): ExternalNavigator {
     // Например, для sharing удобно сделать класс
     // ExternalNavigator, который будет отправлять Intent для открытия нужных приложений в системе.
     //    В коде выше мы превращаем намерения пользователя в конкретные действия:
 //    Эти конкретные действия осуществляются с помощью Android и Context и находятся в ExternalNavigator.
-    fun shareLink(getShareAppLink: String) {
+    override fun shareLink(getShareAppLink: String) {
         //    Поделиться приложением — отправить ссылку на приложение в систему.
         val shareIntent = Intent(Intent.ACTION_SEND)
         shareIntent.type = "text/plain"
@@ -23,7 +24,7 @@ class ExternalNavigator(
 
     }
 
-    fun openLink(getTermsLink: String) {
+    override fun openTerms(getTermsLink: String) {
         //    Пользовательское соглашение — открыть в браузере ссылку на пользовательское соглашение.
         val uri = getTermsLink.toUri()
         val browseIntent = Intent(Intent.ACTION_VIEW, uri)
@@ -31,7 +32,7 @@ class ExternalNavigator(
         context.startActivity(browseIntent)
     }
 
-    fun openEmail(getSupportEmailData: EmailData) {
+    override fun openEmail(getSupportEmailData: EmailData) {
         //    Написать в поддержку — открыть почтовый клиент с адресом поддержки.
         val sendIntent = Intent(Intent.ACTION_SENDTO)
         sendIntent.data = context.getString(R.string.mail_to).toUri()

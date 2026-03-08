@@ -10,16 +10,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.creator.TracksApplication
 import com.practicum.playlistmaker.player.domain.api.TracksInteractor
 import com.practicum.playlistmaker.player.domain.models.Track
 import com.practicum.playlistmaker.search.domain.api.SearchHistoryInteractor
 import com.practicum.playlistmaker.search.ui.models.TracksState
 
-class TracksViewModel(private val context: Context) : ViewModel() {
-    private val tracksInteractor = Creator.provideTracksInteractor(context)
-    private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor(context)
+class TracksViewModel(
+    private val tracksInteractor: TracksInteractor,
+    private val searchHistoryInteractor: SearchHistoryInteractor
+) : ViewModel() {
     private val stateLiveData = MutableLiveData<TracksState>()
     fun observeState(): LiveData<TracksState> = stateLiveData
     private var latestSearchText: String? = null
@@ -138,13 +138,13 @@ class TracksViewModel(private val context: Context) : ViewModel() {
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private val SEARCH_REQUEST_TOKEN = Any()
-        fun getFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app =
-                    (this[ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY] as TracksApplication)
-                TracksViewModel(app)
-            }
-        }
+//        fun getFactory(): ViewModelProvider.Factory = viewModelFactory {
+//            initializer {
+//                val app =
+//                    (this[ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY] as TracksApplication)
+//                TracksViewModel(app)
+//            }
+//        }
 
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }

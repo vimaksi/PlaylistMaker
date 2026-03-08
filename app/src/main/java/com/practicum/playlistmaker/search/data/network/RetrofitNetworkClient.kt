@@ -10,14 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import android.content.Context
 
-class RetrofitNetworkClient(private val context: Context) : NetworkClient {
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(trackBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val trackService = retrofit.create(TrackApiService::class.java)
+class RetrofitNetworkClient(private val trackService: TrackApiService, private val context: Context) : NetworkClient {
 
     override fun doRequest(dto: Any): Response {
         if (isConnected() == false) {
@@ -47,8 +40,5 @@ class RetrofitNetworkClient(private val context: Context) : NetworkClient {
             }
         }
         return false
-    }
-    companion object{
-        const val trackBaseUrl = "https://itunes.apple.com/"
     }
 }

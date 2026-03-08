@@ -6,19 +6,15 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.player.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class AudioPlayerViewModel(private val track: Track) : ViewModel() {
+class AudioPlayerViewModel(private val track: Track,private val mediaPlayer: MediaPlayer) : ViewModel() {
     private val playerStateLiveData = MutableLiveData(STATE_DEFAULT)
     fun observePlayerState(): LiveData<Int> = playerStateLiveData
     private val progressTimeLiveData = MutableLiveData("00:00")
     fun observeProgressTime(): LiveData<String> = progressTimeLiveData
-    private var mediaPlayer = MediaPlayer()
     private var mainThreadHandler = Handler(Looper.getMainLooper())
     private val timerRunnable = Runnable {
         if (playerStateLiveData.value == STATE_PLAYING) {
@@ -95,10 +91,10 @@ class AudioPlayerViewModel(private val track: Track) : ViewModel() {
         const val STATE_PLAYING = 2
         const val STATE_PAUSED = 3
         const val REFRESH_TIMER_DELAY_MILLS = 200L
-        fun getFactory(track: Track): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                AudioPlayerViewModel(track)
-            }
-        }
+//        fun getFactory(track: Track): ViewModelProvider.Factory = viewModelFactory {
+//            initializer {
+//                AudioPlayerViewModel(track)
+//            }
+//        }
     }
 }

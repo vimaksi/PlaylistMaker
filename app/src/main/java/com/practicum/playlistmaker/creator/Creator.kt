@@ -1,13 +1,13 @@
 package com.practicum.playlistmaker.creator
 
-import com.practicum.playlistmaker.sharing.data.ExternalNavigator
+import com.practicum.playlistmaker.sharing.data.ExternalNavigatorImpl
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.search.data.SearchHistoryRepositoryImpl
 import com.practicum.playlistmaker.settings.data.impl.SettingsRepositoryImpl
 import com.practicum.playlistmaker.search.data.TrackRepositoryImpl
-import com.practicum.playlistmaker.settings.data.storage.SettingsStorage
 import com.practicum.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.search.domain.api.SearchHistoryInteractor
 import com.practicum.playlistmaker.search.domain.api.SearchHistoryRepository
@@ -23,48 +23,62 @@ import com.practicum.playlistmaker.search.data.storage.PrefsStorageClient
 import com.practicum.playlistmaker.sharing.data.impl.SharingRepositoryImpl
 import com.practicum.playlistmaker.sharing.domain.SharingInteractor
 import com.practicum.playlistmaker.sharing.domain.impl.SharingInteractorImpl
+import java.lang.reflect.Type
 
-object Creator {
-    private fun getTracksRepository(context: Context): TracksRepository {
-        return TrackRepositoryImpl(RetrofitNetworkClient(context))
-    }
+object Creator {}
+//    private fun getTracksRepository(context: Context): TracksRepository {
+//        return TrackRepositoryImpl(RetrofitNetworkClient(context))
+//    }
+//
+//    fun provideTracksInteractor(context: Context): TracksInteractor {
+//        return TracksInteractorImpl(getTracksRepository(context))
+//    }
+//
+//    private fun getSettingsRepository(sharedPreferences: SharedPreferences): SettingsRepository {
+//        return SettingsRepositoryImpl(SettingsStorage(sharedPreferences))
+//    }
+//
+//    fun provideSettingsInteractor(context: Context): SettingsInteractor {
+//        val sharedPreferences = context.getSharedPreferences(PM_PREFERENCES, Context.MODE_PRIVATE)
+//        return SettingsInteractorImpl(getSettingsRepository(sharedPreferences))
+//    }
+//
+//    fun provideSharingInteractor(context: Context): SharingInteractor {
+//        return SharingInteractorImpl(
+//            provideSharingRepository(
+//                context,
+//                provideExternalNavigator(context)
+//            )
+//        )
+//    }
+//
+//    fun provideSharingRepository(
+//        context: Context,
+//        externalNavigator: ExternalNavigator
+//    ): SharingRepositoryImpl {
+//        return SharingRepositoryImpl(context, externalNavigator)
+//    }
+//
+//    fun provideExternalNavigator(context: Context): ExternalNavigator {
+//        return ExternalNavigator(context)
+//    }
+//}
+//    private fun getSearchHistoryRepository(context: Context): SearchHistoryRepository {
+//        return SearchHistoryRepositoryImpl(
+//            PrefsStorageClient<ArrayList<Track>>(
+//                context,
+//                HISTORY_KEY,
+//            object : TypeToken<ArrayList<Track>>() {}.type
+//
+//                //context
+////                    private val dataKey: String,
+////                private val type: Type,
+//        )
+//        )
 
-    fun provideTracksInteractor(context: Context): TracksInteractor {
-        return TracksInteractorImpl(getTracksRepository(context))
-    }
-
-    private fun getSettingsRepository(sharedPreferences: SharedPreferences): SettingsRepository {
-        return SettingsRepositoryImpl(SettingsStorage(sharedPreferences))
-    }
-
-    fun provideSettingsInteractor(context: Context): SettingsInteractor {
-        val sharedPreferences = context.getSharedPreferences(PM_PREFERENCES, Context.MODE_PRIVATE)
-        return SettingsInteractorImpl(getSettingsRepository(sharedPreferences))
-    }
-    fun provideSharingInteractor(context: Context): SharingInteractor {
-        return SharingInteractorImpl(provideSharingRepository(context, provideExternalNavigator(context)))
-    }
-    fun provideSharingRepository(context: Context, externalNavigator: ExternalNavigator): SharingRepositoryImpl{
-        return SharingRepositoryImpl(context,externalNavigator)
-    }
-    fun provideExternalNavigator(context: Context): ExternalNavigator {
-        return ExternalNavigator(context)
-    }
-
-    private fun getSearchHistoryRepository(context: Context): SearchHistoryRepository {
-        return SearchHistoryRepositoryImpl(
-            PrefsStorageClient<ArrayList<Track>>(
-                context,
-                HISTORY_KEY,
-            object : TypeToken<ArrayList<Track>>() {}.type
-        )
-        )
-    }
-
-    fun provideSearchHistoryInteractor(context: Context): SearchHistoryInteractor {
-        return SearchHistoryInteractorImpl(getSearchHistoryRepository(context))
-    }
-
-        const val PM_PREFERENCES = "playlistmaker"
-        const val HISTORY_KEY = "HISTORY"
-}
+//    fun provideSearchHistoryInteractor(context: Context): SearchHistoryInteractor {
+//        return SearchHistoryInteractorImpl(getSearchHistoryRepository(context))
+////    }
+//
+//        const val PM_PREFERENCES = "playlistmaker"
+//        const val HISTORY_KEY = "HISTORY"

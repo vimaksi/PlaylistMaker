@@ -29,13 +29,13 @@ class SettingsViewModel(
     )
 
     private val handler = Handler(Looper.getMainLooper())
-    fun shareApp() {
-        sharingInteractor.shareApp()
+    fun shareLink() {
+        sharingInteractor.shareLink()
         //Поделиться приложением — отправить ссылку на приложение в систему.
     }
 
-    fun openSupport() {
-        sharingInteractor.openSupport()
+    fun openEmail() {
+        sharingInteractor.openEmail()
         //Написать в поддержку — открыть почтовый клиент с адресом поддержки.
     }
 
@@ -60,13 +60,13 @@ class SettingsViewModel(
 
     companion object {
         private val SETTINGS_REQUEST_TOKEN = Any()
-        fun getFactory(
-            sharingInteractor: SharingInteractor,
-            settingsInteractor: SettingsInteractor
-        ): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SettingsViewModel(sharingInteractor, settingsInteractor)
-            }
-        }
+//        fun getFactory(
+//            sharingInteractor: SharingInteractor,
+//            settingsInteractor: SettingsInteractor
+//        ): ViewModelProvider.Factory = viewModelFactory {
+//            initializer {
+//                SettingsViewModel(sharingInteractor, settingsInteractor)
+//            }
+//        }
     }
 }

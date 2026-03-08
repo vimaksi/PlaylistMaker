@@ -1,68 +1,49 @@
 package com.practicum.playlistmaker.player.ui
 
-import android.media.MediaPlayer
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.TypedValue
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
+import androidx.core.content.IntentCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.practicum.playlistmaker.player.ui.AudioPlayerViewModel
 import com.practicum.playlistmaker.player.ui.AudioPlayerViewModel.Companion.STATE_PLAYING
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.practicum.playlistmaker.player.domain.models.Track
-import java.text.SimpleDateFormat
-import java.util.Locale
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
+
 
 class AudioPlayer : AppCompatActivity() {
-    private lateinit var viewModel: AudioPlayerViewModel
+    private val track: Track by lazy(LazyThreadSafetyMode.NONE) {
+        IntentCompat.getParcelableExtra(intent, TRACK_EXTRA, Track::class.java)
+            ?: error("Track is missing in intent extras")
+    }
+    private val viewModel: AudioPlayerViewModel by viewModel { parametersOf(track) }
     private lateinit var binding: ActivityAudioPlayerBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        ViewCompat.setOnApplyWindowInsetsListener(binding.menuButton) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-//            insets
-//        }
-
-//        setSupportActionBar(binding.menuButton)
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//        supportActionBar?.setDisplayShowHomeEnabled(true)
-
-        val track: Track? = (
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    intent.getParcelableExtra(TRACK_EXTRA, Track::class.java)
-                } else {
-                    @Suppress("DEPRECATION")
-                    intent.getParcelableExtra(TRACK_EXTRA)
-                })
+//        val track: Track? = (// перенести
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//                    intent.getParcelableExtra(TRACK_EXTRA, Track::class.java)
+//                } else {
+//                    @Suppress("DEPRECATION")
+//                    intent.getParcelableExtra(TRACK_EXTRA)
+//                })
 
         if (track == null) {
             finish()
             return
         }
 
-        viewModel = ViewModelProvider(this, AudioPlayerViewModel.getFactory(track))
-            .get(AudioPlayerViewModel::class.java)
-
         viewModel.observePlayerState().observe(this) {
             changeButton(it == STATE_PLAYING)
-            // enableButton(it != AudioPlayerViewModel.STATE_DEFAULT)//??
         }
 
         viewModel.observeProgressTime().observe(this) {
@@ -75,7 +56,6 @@ class AudioPlayer : AppCompatActivity() {
         Glide.with(this)
             .load(track.getCoverArtwork())
             .placeholder(R.drawable.ic_placeholder_312)
-            //.centerCrop()
             .transform(RoundedCorners(dpToPx(8f)))
             .into(binding.imageAlbum)
 
@@ -128,10 +108,6 @@ class AudioPlayer : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
     }
-
-//    private fun enableButton(isEnabled: Boolean) {
-//        binding.play.isEnabled = isEnabled
-//    }
 
     private fun changeButton(isPlaying: Boolean) {
         if (isPlaying) {

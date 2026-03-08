@@ -7,11 +7,12 @@ import com.practicum.playlistmaker.search.data.StorageClient
 import java.lang.reflect.Type
 
 class PrefsStorageClient<T>(
-    private val context: Context,
     private val dataKey: String,
-    private val type: Type) : StorageClient<T> {
-    private val prefs: SharedPreferences = context.getSharedPreferences(SEARCH_TRACK_HISTORY_KEY, Context.MODE_PRIVATE)
-    private val gson = Gson()
+    private val type: Type,
+    private val prefs: SharedPreferences,
+    private val gson: Gson
+) : StorageClient<T> {
+
 
     override fun storeData(data: T) {
         prefs.edit().putString(dataKey, gson.toJson(data, type)).apply()
@@ -28,8 +29,5 @@ class PrefsStorageClient<T>(
 
     override fun clearData() {
         prefs.edit().remove(dataKey).apply()
-    }
-    companion object{
-        const val SEARCH_TRACK_HISTORY_KEY = "TRACKS_SEARCH"
     }
 }

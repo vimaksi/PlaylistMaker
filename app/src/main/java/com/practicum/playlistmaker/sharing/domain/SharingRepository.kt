@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.sharing.domain
 
 interface SharingRepository{
-    fun shareApp()
+    fun shareLink()
     fun openTerms()
-    fun openSupport()
+    fun openEmail()
 }

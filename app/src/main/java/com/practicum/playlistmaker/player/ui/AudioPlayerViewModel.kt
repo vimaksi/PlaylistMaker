@@ -95,10 +95,10 @@ class AudioPlayerViewModel(private val track: Track) : ViewModel() {
         const val STATE_PLAYING = 2
         const val STATE_PAUSED = 3
         const val REFRESH_TIMER_DELAY_MILLS = 200L
-        fun getFactory(track: Track): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                AudioPlayerViewModel(track)
-            }
-        }
+//        fun getFactory(track: Track): ViewModelProvider.Factory = viewModelFactory {
+//            initializer {
+//                AudioPlayerViewModel(track)
+//            }
+//        }
     }
 }

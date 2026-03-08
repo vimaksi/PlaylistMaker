@@ -3,8 +3,6 @@ package com.practicum.playlistmaker.search.ui
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -12,14 +10,15 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.practicum.playlistmaker.search.ui.TracksViewModel
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.player.domain.models.Track
 import com.practicum.playlistmaker.player.ui.AudioPlayer
 import com.practicum.playlistmaker.search.ui.models.TracksState
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class SearchActivity : AppCompatActivity() {
-    private var viewModel: TracksViewModel? = null
+    private val viewModel:TracksViewModel by viewModel()
     private lateinit var binding: ActivitySearchBinding
     private lateinit var simpleTextWatcher: TextWatcher
     val adapter = TrackAdapter()
@@ -34,8 +33,8 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this, TracksViewModel.getFactory())
-            .get(TracksViewModel::class.java)
+//        viewModel = ViewModelProvider(this, TracksViewModel.getFactory())
+//            .get(TracksViewModel::class.java)
 
         viewModel?.observeState()?.observe(this) {
             render(it)

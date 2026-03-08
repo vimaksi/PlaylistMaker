@@ -3,8 +3,6 @@ package com.practicum.playlistmaker.settings.domain
 import com.practicum.playlistmaker.settings.domain.model.ThemeSettings
 
 interface SettingsRepository {
-    //    fun saveDarkTheme(enabled: Boolean)
-//    fun isDarkThemeEnabled(): Boolean
     fun getThemeSettings(): ThemeSettings
     fun updateThemeSetting(settings: ThemeSettings)
 }

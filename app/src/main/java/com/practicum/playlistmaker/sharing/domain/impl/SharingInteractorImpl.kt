@@ -6,8 +6,8 @@ import com.practicum.playlistmaker.sharing.domain.SharingRepository
 class SharingInteractorImpl(
     private val repository: SharingRepository
 ) : SharingInteractor {
-    override fun shareApp() {
-        repository.shareApp()
+    override fun shareLink() {
+        repository.shareLink()
         //    Поделиться приложением — отправить ссылку на приложение в систему.
     }
 
@@ -16,9 +16,9 @@ class SharingInteractorImpl(
         //    Пользовательское соглашение — открыть в браузере ссылку на пользовательское соглашение.
     }
 
-    override fun openSupport() {
+    override fun openEmail() {
         //    Написать в поддержку — открыть почтовый клиент с адресом поддержки.
-        repository.openSupport()
+        repository.openEmail()
     }
 }
 //    Пользовательское соглашение — открыть в браузере ссылку на пользовательское соглашение.

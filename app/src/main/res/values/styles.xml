@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="MainButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/null_dp</item>
@@ -16,6 +17,7 @@
         <item name="android:layout_marginTop">@dimen/padding_medium</item>
         <item name="android:textFontWeight">500</item>
     </style>
+
     <style name="SettingsTextStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -30,6 +32,7 @@
         <item name="android:drawableTint">@color/gray</item>
         <item name="android:backgroundTint">@color/white</item>
     </style>
+
     <style name="ToolbarStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">56dp</item>
@@ -40,6 +43,7 @@
         <item name="navigationIcon">@drawable/ic_arrow_back_24</item>
         <item name="navigationIconTint">?attr/colorControlNormal</item>
     </style>
+
     <style name="TextViewSearchStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">36dp</item>
@@ -56,6 +60,7 @@
         <item name="android:background">@drawable/text_view_shape</item>
         <item name="android:paddingStart">@dimen/padding_medium</item>
     </style>
+
     <style name="TrackViewStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -65,6 +70,7 @@
         <item name="android:textSize">@dimen/text_size_11</item>
         <item name="android:gravity">left</item>
     </style>
+
     <style name="TextViewErrorStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -77,6 +83,7 @@
         <item name="android:textSize">19sp</item>
         <item name="android:drawableTint">@null</item>
     </style>
+
     <style name="ButtonSearchStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -93,6 +100,7 @@
         <item name="android:paddingTop">24dp</item>
         <item name="android:layout_marginVertical">24dp</item>
     </style>
+
     <style name="TextViewAudioPlayer">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -102,9 +110,11 @@
         <item name="android:textSize">@dimen/text_size_13</item>
         <item name="android:layout_marginTop">@dimen/margin_top_17</item>
     </style>
+
     <style name="TextViewAudioPlayerTrack" parent="TextViewAudioPlayer">
         <item name="android:textColor">?attr/colorControlNormal</item>
     </style>
+
     <style name="ImageViewAudioPlayer">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -113,5 +123,12 @@
         <item name="android:backgroundTint">@color/black_light</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="tint">@color/white</item>
+    </style>
+
+    <style name="MyTabLayoutTextAppearance">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="textAllCaps">false</item>
     </style>
 </resources>

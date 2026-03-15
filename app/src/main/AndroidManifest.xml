@@ -20,7 +20,7 @@
             android:name=".player.ui.AudioPlayer"
             android:exported="false" />
         <activity
-            android:name=".player.ui.LibraryActivity"
+            android:name=".library.ui.LibraryActivity"
             android:exported="false" />
         <activity
             android:name=".search.ui.SearchActivity"

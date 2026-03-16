@@ -23,16 +23,9 @@
         app:tabTextColor="?attr/colorControlNormal"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp" />
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>
-
-    <!--
-
-            style="@style/TextViewErrorStyle"
-            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"-->
-    <!--        style="@style/TabTheme"-->
 

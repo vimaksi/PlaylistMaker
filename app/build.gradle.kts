@@ -45,7 +45,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -64,4 +63,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.activity.ktx)
     implementation("io.insert-koin:koin-android:3.3.0")
+    implementation ("com.google.android.material:material:1.8.0")
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
 }

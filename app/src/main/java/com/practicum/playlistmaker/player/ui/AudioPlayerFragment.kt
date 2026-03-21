@@ -1,49 +1,52 @@
 package com.practicum.playlistmaker.player.ui
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
 import androidx.core.content.IntentCompat
+import androidx.core.content.IntentCompat.getParcelableExtra
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.practicum.playlistmaker.player.ui.AudioPlayerViewModel.Companion.STATE_PLAYING
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivityAudioPlayerBinding
+import com.practicum.playlistmaker.databinding.FragmentAudioPlayerBinding
 import com.practicum.playlistmaker.player.domain.models.Track
+import com.practicum.playlistmaker.player.ui.AudioPlayerViewModel.Companion.STATE_PLAYING
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import kotlin.getValue
 
+class AudioPlayerFragment : Fragment() {
+    private lateinit var binding: FragmentAudioPlayerBinding
 
-class AudioPlayer : AppCompatActivity() {
-    private val track: Track by lazy(LazyThreadSafetyMode.NONE) {
-        IntentCompat.getParcelableExtra(intent, TRACK_EXTRA, Track::class.java)
-            ?: error("Track is missing in intent extras")
-    }
+     val track: Track by lazy{
+        requireArguments().getParcelable<Track>(ARGS_TRACK_ID)
+            ?: error("Track is missing")}
+
     private val viewModel: AudioPlayerViewModel by viewModel { parametersOf(track) }
-    private lateinit var binding: ActivityAudioPlayerBinding
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentAudioPlayerBinding.inflate(inflater, container, false)
 
+        return binding.root
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        if (track == null) {
-            finish()
-            return
-        }
-
-        viewModel.observePlayerState().observe(this) {
+        viewModel.observePlayerState().observe(viewLifecycleOwner) {
             changeButton(it == STATE_PLAYING)
         }
 
-        viewModel.observeProgressTime().observe(this) {
+        viewModel.observeProgressTime().observe(viewLifecycleOwner) {
             binding.trackTimeCurrent.text = it
-        }
-        binding.menuButton.setNavigationOnClickListener {
-            finish()
         }
 
         Glide.with(this)
@@ -66,6 +69,9 @@ class AudioPlayer : AppCompatActivity() {
         }
         binding.pause.setOnClickListener {
             viewModel.pausePlayer()
+        }
+        binding.menuButton.setOnClickListener{
+            findNavController().navigateUp()
         }
     }
 
@@ -98,9 +104,6 @@ class AudioPlayer : AppCompatActivity() {
         ).toInt()
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
 
     private fun changeButton(isPlaying: Boolean) {
         if (isPlaying) {
@@ -114,6 +117,7 @@ class AudioPlayer : AppCompatActivity() {
     }
 
     companion object {
-        const val TRACK_EXTRA = "TRACK_EXTRA"
+        private const val ARGS_TRACK_ID = "TRACK_EXTRA"
+        fun createArgs(track: Track): Bundle = bundleOf(ARGS_TRACK_ID to track)
     }
 }

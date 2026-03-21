@@ -98,7 +98,7 @@ class SearchFragment : Fragment() {
         }
         binding.clearButton.setOnClickListener {
             binding.inputEditText.setText("")
-            //closeKeyboard()//??
+            closeKeyboard()
         }
 
         binding.inputEditText.setOnFocusChangeListener { view, hasFocus ->
@@ -121,7 +121,7 @@ class SearchFragment : Fragment() {
             progressBar.visibility = View.GONE
             trackList.visibility = View.VISIBLE
             historyLayout.visibility = View.GONE
-            //closeKeyboard()//??
+            closeKeyboard()
             adapter.tracks = foundTrack
             adapter.notifyDataSetChanged()
         }
@@ -150,6 +150,7 @@ class SearchFragment : Fragment() {
             progressBar.visibility = View.VISIBLE
             trackList.visibility = View.GONE
             historyLayout.visibility = View.GONE
+            closeKeyboard()
         }
     }
 
@@ -159,7 +160,7 @@ class SearchFragment : Fragment() {
             errorNoData.visibility = View.GONE
             trackList.visibility = View.GONE
             progressBar.visibility = View.GONE
-           // closeKeyboard()//??
+            closeKeyboard()
         }
     }
 
@@ -172,31 +173,22 @@ class SearchFragment : Fragment() {
         }
     }
 
-//    private fun closeKeyboard() {//???вью модел и так сохраняет
-//        this.currentFocus?.let { view ->
-//            val imm = getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
-//            imm?.hideSoftInputFromWindow(view.windowToken, 0)
-//        }
-//    }
+    private fun closeKeyboard() {
+        requireActivity().currentFocus?.let { view ->
+            val imm = requireContext().getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
 
-//    override fun onSaveInstanceState(outState: Bundle) {//???вью модел и так сохраняет
-//        //сохранение данных при повороте экрана
-//        super.onSaveInstanceState(outState)
-//        outState.putString(EDIT_TEXT, constTextEdit)
-//        outState.putInt(
-//            IS_VISIBLE_BUTTON,
-//            constIsClearButtonVisible
-//        )
-//    }
-
-//    override fun onRestoreInstanceState(savedInstanceState: Bundle) { //???вью модел и так сохраняет
-//        super.onRestoreInstanceState(savedInstanceState)
-//        constTextEdit = savedInstanceState.getString(
-//            EDIT_TEXT,
-//            TEXT_EDIT_VALUE
-//        )
-//        constIsClearButtonVisible = savedInstanceState.getInt(IS_VISIBLE_BUTTON, 0)
-//    }
+    override fun onSaveInstanceState(outState: Bundle) {//???вью модел и так сохраняет
+        //сохранение данных при повороте экрана
+        super.onSaveInstanceState(outState)
+        outState.putString(EDIT_TEXT, constTextEdit)
+        outState.putInt(
+            IS_VISIBLE_BUTTON,
+            constIsClearButtonVisible
+        )
+    }
 
     override fun onDestroy() {
         super.onDestroy()

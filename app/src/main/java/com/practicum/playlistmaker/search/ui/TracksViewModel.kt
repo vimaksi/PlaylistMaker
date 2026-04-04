@@ -24,7 +24,6 @@ class TracksViewModel(
     fun observeState(): LiveData<TracksState> = stateLiveData
     private var latestSearchText: String? = null
     private val handler = Handler(Looper.getMainLooper())
-
     private var isClickAllowed = true
 
     fun searchDebounce(changedText: String, force: Boolean = false) {
@@ -138,14 +137,6 @@ class TracksViewModel(
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private val SEARCH_REQUEST_TOKEN = Any()
-//        fun getFactory(): ViewModelProvider.Factory = viewModelFactory {
-//            initializer {
-//                val app =
-//                    (this[ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY] as TracksApplication)
-//                TracksViewModel(app)
-//            }
-//        }
-
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }

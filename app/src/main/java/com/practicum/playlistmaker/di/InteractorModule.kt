@@ -2,7 +2,6 @@ package com.practicum.playlistmaker.di
 
 import com.practicum.playlistmaker.player.domain.api.TracksInteractor
 import com.practicum.playlistmaker.player.domain.impl.TracksInteractorImpl
-import com.practicum.playlistmaker.player.ui.AudioPlayer
 import com.practicum.playlistmaker.search.domain.api.SearchHistoryInteractor
 import com.practicum.playlistmaker.search.domain.impl.SearchHistoryInteractorImpl
 import com.practicum.playlistmaker.settings.domain.SettingsInteractor

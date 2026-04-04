@@ -1,42 +1,47 @@
 package com.practicum.playlistmaker.search.ui
 
-import android.annotation.SuppressLint
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.player.domain.models.Track
-import com.practicum.playlistmaker.player.ui.AudioPlayer
+import com.practicum.playlistmaker.player.ui.AudioPlayerFragment
 import com.practicum.playlistmaker.search.ui.models.TracksState
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.getValue
 
-
-class SearchActivity : AppCompatActivity() {
-    private val viewModel:TracksViewModel by viewModel()
-    private lateinit var binding: ActivitySearchBinding
+class SearchFragment : Fragment() {
+    private val viewModel: TracksViewModel by viewModel()
     private lateinit var simpleTextWatcher: TextWatcher
     val adapter = TrackAdapter()
     private val historyAdapter = TrackAdapter()
     private var constTextEdit: String = TEXT_EDIT_VALUE
     private var constIsClearButtonVisible: Int = 8
+    private lateinit var binding: FragmentSearchBinding
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-    @SuppressLint("MissingInflatedId")
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-//        viewModel = ViewModelProvider(this, TracksViewModel.getFactory())
-//            .get(TracksViewModel::class.java)
-
-        viewModel?.observeState()?.observe(this) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel?.observeState()?.observe(viewLifecycleOwner) {
             render(it)
         }
 
@@ -47,23 +52,21 @@ class SearchActivity : AppCompatActivity() {
         binding.inputEditText.setText(constTextEdit.toString())
         binding.clearButton.visibility = constIsClearButtonVisible
 
-        binding.back.setOnClickListener {
-            finish()
-        }
-
         binding.trackList.adapter = adapter
         binding.trackList.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         adapter.onTrackClick = { track ->
             viewModel?.onCLickTrack(track)
-                startAudioPlayerActivity(track)
-            }
+            findNavController().navigate(R.id.action_searchFragment_to_audioPlayerFragment,
+                AudioPlayerFragment.createArgs(track))
+        }
 
         binding.trackListSearch.adapter = historyAdapter
         historyAdapter.onTrackClick = { track ->
             viewModel?.onCLickTrack(track)
-            startAudioPlayerActivity(track)
+            findNavController().navigate(R.id.action_searchFragment_to_audioPlayerFragment,
+                AudioPlayerFragment.createArgs(track))
         }
 
         simpleTextWatcher = object : TextWatcher {
@@ -110,6 +113,7 @@ class SearchActivity : AppCompatActivity() {
             View.VISIBLE
         }
     }
+
     fun showContent(foundTrack: List<Track>) {
         binding.apply {
             errorNoInternet.visibility = View.GONE
@@ -146,6 +150,7 @@ class SearchActivity : AppCompatActivity() {
             progressBar.visibility = View.VISIBLE
             trackList.visibility = View.GONE
             historyLayout.visibility = View.GONE
+            closeKeyboard()
         }
     }
 
@@ -169,13 +174,13 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun closeKeyboard() {
-        this.currentFocus?.let { view ->
-            val imm = getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
+        requireActivity().currentFocus?.let { view ->
+            val imm = requireContext().getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
             imm?.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
+    override fun onSaveInstanceState(outState: Bundle) {//???вью модел и так сохраняет
         //сохранение данных при повороте экрана
         super.onSaveInstanceState(outState)
         outState.putString(EDIT_TEXT, constTextEdit)
@@ -183,15 +188,6 @@ class SearchActivity : AppCompatActivity() {
             IS_VISIBLE_BUTTON,
             constIsClearButtonVisible
         )
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        constTextEdit = savedInstanceState.getString(
-            EDIT_TEXT,
-            TEXT_EDIT_VALUE
-        )
-        constIsClearButtonVisible = savedInstanceState.getInt(IS_VISIBLE_BUTTON, 0)
     }
 
     override fun onDestroy() {
@@ -207,12 +203,6 @@ class SearchActivity : AppCompatActivity() {
             is TracksState.HistoryContent -> showHistory(state.tracks)
             is TracksState.Content -> showContent(state.tracks)
         }
-    }
-
-    fun startAudioPlayerActivity(track: Track) {
-        val audioPlayerIntent = Intent(this, AudioPlayer::class.java)
-        audioPlayerIntent.putExtra(AudioPlayer.Companion.TRACK_EXTRA, track)
-        startActivity(audioPlayerIntent)
     }
 
     companion object {

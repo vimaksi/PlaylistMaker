@@ -1,13 +1,12 @@
-package com.practicum.playlistmaker.player.ui
+package com.practicum.playlistmaker.player.presentation
 
 import android.media.MediaPlayer
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.player.AudioPlayerState
+import com.practicum.playlistmaker.library.domain.db.LikeInteractor
+import com.practicum.playlistmaker.player.presentation.AudioPlayerState
 import com.practicum.playlistmaker.player.domain.models.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -15,14 +14,21 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class AudioPlayerViewModel(private val track: Track, private val mediaPlayer: MediaPlayer) :
+class AudioPlayerViewModel(
+    private val track: Track,
+    private val mediaPlayer: MediaPlayer,
+    private val likeInteractor: LikeInteractor
+) :
     ViewModel() {
     private var timerJob: Job? = null
     private val playerStateLiveData = MutableLiveData<AudioPlayerState>(AudioPlayerState.Default())
     fun observePlayerState(): LiveData<AudioPlayerState> = playerStateLiveData
+    private val likeStateLiveData = MutableLiveData<LikeState>()
+    fun observeLikeState(): LiveData<LikeState> = likeStateLiveData
 
     init {
         preparePlayer()
+        checkLike()
     }
 
     override fun onCleared() {
@@ -30,14 +36,21 @@ class AudioPlayerViewModel(private val track: Track, private val mediaPlayer: Me
         releasePlayer()
     }
 
+    fun checkLike() {
+        viewModelScope.launch {
+            likeStateLiveData.postValue(LikeState( track.isLike))
+        }
+    }
     fun onPlayButtonClicked() {
         when (playerStateLiveData.value) {
             is AudioPlayerState.Playing -> {
                 pausePlayer()
             }
+
             is AudioPlayerState.Paused, is AudioPlayerState.Prepared -> {
                 startPlayer()
             }
+
             else -> {}
         }
     }
@@ -58,10 +71,12 @@ class AudioPlayerViewModel(private val track: Track, private val mediaPlayer: Me
         playerStateLiveData.postValue(AudioPlayerState.Playing(getCurrentPlayerPosition()))
         startTimer()
     }
+
     fun onPause() {
         pausePlayer()
     }
-    private fun startTimer(){
+
+    private fun startTimer() {
         timerJob = viewModelScope.launch {
             while (mediaPlayer.isPlaying) {
                 delay(REFRESH_TIMER_DELAY_MILLS)
@@ -70,6 +85,7 @@ class AudioPlayerViewModel(private val track: Track, private val mediaPlayer: Me
             playerStateLiveData.postValue(AudioPlayerState.Prepared())
         }
     }
+
     fun pausePlayer() {
         mediaPlayer.pause()
         timerJob?.cancel()
@@ -83,11 +99,22 @@ class AudioPlayerViewModel(private val track: Track, private val mediaPlayer: Me
         ).format(mediaPlayer.currentPosition) ?: "00:00"
     }
 
-    private fun releasePlayer(){
+    private fun releasePlayer() {
         mediaPlayer.stop()
         mediaPlayer.release()
         playerStateLiveData.value = AudioPlayerState.Default()
     }
+    fun onLikeClicked() {
+        viewModelScope.launch {
+            if (track.isLike)
+                likeInteractor.unlikeTrack(track)
+            else
+                likeInteractor.likeTrack(track)
+            track.isLike = !track.isLike
+            likeStateLiveData.postValue(LikeState(track.isLike))
+        }
+    }
+
     companion object {
         const val REFRESH_TIMER_DELAY_MILLS = 300L
     }

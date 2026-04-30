@@ -119,7 +119,7 @@
         <item name="android:background">@drawable/round_button</item>
         <item name="android:backgroundTint">@color/white_dark</item>
         <item name="android:scaleType">centerCrop</item>
-        <item name="tint">@color/white</item>
+
     </style>
 
     <style name="MyTabLayoutTextAppearance">

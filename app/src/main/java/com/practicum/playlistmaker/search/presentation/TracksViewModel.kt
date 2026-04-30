@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.search.ui
+package com.practicum.playlistmaker.search.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.player.domain.api.TracksInteractor
 import com.practicum.playlistmaker.player.domain.models.Track
 import com.practicum.playlistmaker.search.domain.api.SearchHistoryInteractor
-import com.practicum.playlistmaker.search.ui.models.TracksState
 import com.practicum.playlistmaker.util.debounce
 import kotlinx.coroutines.launch
 
@@ -68,9 +67,6 @@ class TracksViewModel(
     }
 
     fun processResult(foundTracks: List<Track>?, errorMessage: String?) {
-//                        if (latestSearchText != newSearchText) {
-//                                return@post
-//                        }
         val tracks = mutableListOf<Track>()
         if (foundTracks != null) {
             tracks.clear()

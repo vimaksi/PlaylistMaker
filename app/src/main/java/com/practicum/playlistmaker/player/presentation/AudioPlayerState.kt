@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.player
+package com.practicum.playlistmaker.player.presentation
 
 sealed class AudioPlayerState(val isPlayButtonEnabled: Boolean, val progress: String) {
     class Playing (progress: String): AudioPlayerState(false, progress)

@@ -17,7 +17,8 @@ import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.player.domain.models.Track
 import com.practicum.playlistmaker.player.ui.AudioPlayerFragment
 import com.practicum.playlistmaker.root.ui.RootActivity
-import com.practicum.playlistmaker.search.ui.models.TracksState
+import com.practicum.playlistmaker.search.presentation.TracksState
+import com.practicum.playlistmaker.search.presentation.TracksViewModel
 import com.practicum.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue

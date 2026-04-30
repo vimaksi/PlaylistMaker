@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.di
 
+import com.practicum.playlistmaker.library.domain.db.LikeInteractor
+import com.practicum.playlistmaker.library.domain.impl.LikeInteractorImpl
 import com.practicum.playlistmaker.player.domain.api.TracksInteractor
 import com.practicum.playlistmaker.player.domain.impl.TracksInteractorImpl
 import com.practicum.playlistmaker.search.domain.api.SearchHistoryInteractor
@@ -11,17 +13,18 @@ import com.practicum.playlistmaker.sharing.domain.impl.SharingInteractorImpl
 import org.koin.dsl.module
 
 val interactorModule = module {
-    factory<TracksInteractor>{
+    factory<TracksInteractor> {
         TracksInteractorImpl(get())
     }
-    factory<SearchHistoryInteractor>{
+    factory<SearchHistoryInteractor> {
         SearchHistoryInteractorImpl(get())
     }
-    factory<SharingInteractor>{
+    factory<SharingInteractor> {
         SharingInteractorImpl(get())
     }
     factory<SettingsInteractor> {
         SettingsInteractorImpl(get())
     }
-    factory {  }
+    factory<LikeInteractor> {
+        LikeInteractorImpl(get()) }
 }

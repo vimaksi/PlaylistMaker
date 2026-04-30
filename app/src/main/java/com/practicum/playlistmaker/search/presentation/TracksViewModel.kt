@@ -4,14 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.player.domain.api.TracksInteractor
+import com.practicum.playlistmaker.search.domain.api.SearchTracksInteractor
 import com.practicum.playlistmaker.player.domain.models.Track
 import com.practicum.playlistmaker.search.domain.api.SearchHistoryInteractor
 import com.practicum.playlistmaker.util.debounce
 import kotlinx.coroutines.launch
 
 class TracksViewModel(
-    private val tracksInteractor: TracksInteractor,
+    private val tracksInteractor: SearchTracksInteractor,
     private val searchHistoryInteractor: SearchHistoryInteractor
 ) : ViewModel() {
     private val stateLiveData = MutableLiveData<TracksState>()

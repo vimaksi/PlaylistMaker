@@ -17,4 +17,7 @@ class LikeInteractorImpl(private val likeRepository: LikeRepository): LikeIntera
     override suspend fun likeTrack(track: Track) {
         likeRepository.likeTrack(track)
     }
+    override suspend fun getTrackId(track: Track) : Int {
+        return likeRepository.getTrackId(track)
+    }
 }

@@ -20,8 +20,8 @@ interface TrackDao {
      @Query("DELETE FROM tracks_table WHERE trackId = :trackId")
      suspend fun deleteTrack(trackId: Int)
     //метод для определения наличия трека в избранном
-    @Query("SELECT trackId FROM tracks_table ")
-    suspend fun getTrackIds(): List<Int>
+    @Query("SELECT trackId FROM tracks_table WHERE trackId = :trackId")
+    suspend fun getTrackId(trackId: Int): Int
     @Transaction
     suspend fun deleteAndInsertTrack(track: TrackEntity) {
         deleteTrack(track.trackId)

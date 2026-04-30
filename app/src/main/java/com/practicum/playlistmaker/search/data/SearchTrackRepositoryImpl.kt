@@ -4,13 +4,12 @@ import com.practicum.playlistmaker.creator.Resource
 import com.practicum.playlistmaker.library.data.db.AppDatabase
 import com.practicum.playlistmaker.search.data.dto.TrackSearchResponse
 import com.practicum.playlistmaker.search.data.dto.TracksSearchRequest
-import com.practicum.playlistmaker.player.domain.api.TracksRepository
+import com.practicum.playlistmaker.search.domain.api.SearchTracksRepository
 import com.practicum.playlistmaker.player.domain.models.Track
-import com.practicum.playlistmaker.search.data.dto.TrackDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class TrackRepositoryImpl(private val networkClient: NetworkClient,private val appDatabase: AppDatabase) : TracksRepository {
+class SearchTrackRepositoryImpl(private val networkClient: NetworkClient, private val appDatabase: AppDatabase) : SearchTracksRepository {
     override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
         when (response.resultCode) {
@@ -20,7 +19,6 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient,private val a
 
             200 -> {
                 with(response as TrackSearchResponse) {
-                   val listLike =  appDatabase.trackDao().getTrackIds()
                     val data = response.results.map{ trackDto ->
                         Track(
                             trackDto.trackId,
@@ -32,8 +30,7 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient,private val a
                             trackDto.releaseDate,
                             trackDto.primaryGenreName,
                             trackDto.country,
-                            trackDto.previewUrl,
-                          isLike = listLike.contains(trackDto.trackId)
+                            trackDto.previewUrl
                         )
                     }
                     emit(Resource.Success(data))

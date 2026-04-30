@@ -3,9 +3,9 @@ package com.practicum.playlistmaker.di
 import com.practicum.playlistmaker.library.data.LikeRepositoryImpl
 import com.practicum.playlistmaker.library.data.converters.TrackDbConvertor
 import com.practicum.playlistmaker.library.domain.db.LikeRepository
-import com.practicum.playlistmaker.player.domain.api.TracksRepository
+import com.practicum.playlistmaker.search.domain.api.SearchTracksRepository
 import com.practicum.playlistmaker.search.data.SearchHistoryRepositoryImpl
-import com.practicum.playlistmaker.search.data.TrackRepositoryImpl
+import com.practicum.playlistmaker.search.data.SearchTrackRepositoryImpl
 import com.practicum.playlistmaker.search.domain.api.SearchHistoryRepository
 import com.practicum.playlistmaker.settings.data.impl.SettingsRepositoryImpl
 import com.practicum.playlistmaker.settings.domain.SettingsRepository
@@ -14,8 +14,8 @@ import com.practicum.playlistmaker.sharing.domain.SharingRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    factory<TracksRepository>{
-        TrackRepositoryImpl(get(),get())
+    factory<SearchTracksRepository>{
+        SearchTrackRepositoryImpl(get(),get())
     }
     factory<SearchHistoryRepository>{
         SearchHistoryRepositoryImpl(get())
@@ -23,11 +23,11 @@ val repositoryModule = module {
     factory<SharingRepository>{
         SharingRepositoryImpl(get(),get())
     }
-    factory< SettingsRepository> {
+    factory<SettingsRepository> {
         SettingsRepositoryImpl(get())
     }
     factory { TrackDbConvertor() }
     single<LikeRepository>{
-        LikeRepositoryImpl(get(),get())
+            LikeRepositoryImpl(get(),get())
     }
 }

@@ -1,9 +1,6 @@
 import org.gradle.kotlin.dsl.annotationProcessor
 
 
-
-
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -73,10 +70,9 @@ dependencies {
     // Подключаем модуль для работы с ViewBinding
     implementation("com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:4.3.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
-    val room_version = "2.8.4"
-    implementation("androidx.room:room-runtime:${room_version}")
+    implementation(libs.androidx.room.runtime)
 // Kotlin Symbol Processing (KSP)
-    ksp("androidx.room:room-compiler:$room_version")
+    ksp(libs.androidx.room.compiler)
 // Kotlin Extensions для корутин
-    implementation("androidx.room:room-ktx:${room_version}")
+    implementation(libs.room.ktx)
 }

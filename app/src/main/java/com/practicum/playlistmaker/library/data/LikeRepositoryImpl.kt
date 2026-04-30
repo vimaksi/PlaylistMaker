@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.library.data
 
 import com.practicum.playlistmaker.library.data.converters.TrackDbConvertor
 import com.practicum.playlistmaker.library.data.db.AppDatabase
+import com.practicum.playlistmaker.library.data.db.dao.TrackDao
 import com.practicum.playlistmaker.library.data.db.entity.TrackEntity
 import com.practicum.playlistmaker.library.domain.db.LikeRepository
 import com.practicum.playlistmaker.player.domain.models.Track
@@ -13,23 +14,8 @@ class LikeRepositoryImpl(
     private val trackDbConvertor: TrackDbConvertor
 ) : LikeRepository {
     override fun likeTracks(): Flow<List<Track>> = flow {
- //       val listLike = appDatabase.trackDao().getTrackIds()
-        val tracks = appDatabase.trackDao().getAllTracks()
-//            .map { trackDto ->
-//                Track(
-//                    trackDto.trackId,
-//                    trackDto.trackName,
-//                    trackDto.artistName,
-//                    trackDto.trackTimeMillis,
-//                    trackDto.artworkUrl100,
-//                    trackDto.collectionName,
-//                    trackDto.releaseDate,
-//                    trackDto.primaryGenreName,
-//                    trackDto.country,
-//                    trackDto.previewUrl,
-//                    isLike = listLike.contains(trackDto.trackId)
-//                )
-//            }
+        val tracks = appDatabase.trackDao()
+            .getAllTracks()//треки из базы по умолчанию лайки, нужно проставить признак лайка
         emit(convertFromTrackEntityToTrack(tracks))
     }
 
@@ -41,6 +27,11 @@ class LikeRepositoryImpl(
     override suspend fun likeTrack(track: Track) {
         val trackEntity = trackDbConvertor.map(track)
         appDatabase.trackDao().insertTrack(trackEntity)
+    }
+
+    override suspend fun getTrackId(track: Track): Int {
+        val trackEntity = trackDbConvertor.map(track)
+        return appDatabase.trackDao().getTrackId(trackEntity.trackId)
     }
 
     private fun convertFromTrackEntityToTrack(tracks: List<TrackEntity>): List<Track> {

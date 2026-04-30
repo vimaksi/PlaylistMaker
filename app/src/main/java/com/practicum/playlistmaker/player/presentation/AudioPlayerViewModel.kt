@@ -36,11 +36,6 @@ class AudioPlayerViewModel(
         releasePlayer()
     }
 
-    fun checkLike() {
-        viewModelScope.launch {
-            likeStateLiveData.postValue(LikeState( track.isLike))
-        }
-    }
     fun onPlayButtonClicked() {
         when (playerStateLiveData.value) {
             is AudioPlayerState.Playing -> {
@@ -104,6 +99,7 @@ class AudioPlayerViewModel(
         mediaPlayer.release()
         playerStateLiveData.value = AudioPlayerState.Default()
     }
+
     fun onLikeClicked() {
         viewModelScope.launch {
             if (track.isLike)
@@ -111,6 +107,18 @@ class AudioPlayerViewModel(
             else
                 likeInteractor.likeTrack(track)
             track.isLike = !track.isLike
+            likeStateLiveData.postValue(LikeState(track.isLike))
+        }
+    }
+
+    fun checkLike() {
+        viewModelScope.launch {
+            val isLikeTrackId = likeInteractor.getTrackId(track)
+            if (track.trackId == isLikeTrackId) {
+                track.isLike = true
+            } else {
+                track.isLike = false
+            }
             likeStateLiveData.postValue(LikeState(track.isLike))
         }
     }

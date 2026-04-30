@@ -32,7 +32,6 @@ class TrackDbConvertor {
             trackEntity.primaryGenreName,
             trackEntity.country,
             trackEntity.previewUrl,
-            true
         )
     }
 }

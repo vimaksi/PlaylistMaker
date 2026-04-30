@@ -71,4 +71,5 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.5.6")
     // Подключаем модуль для работы с ViewBinding
     implementation("com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:4.3.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 }

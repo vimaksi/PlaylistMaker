@@ -5,8 +5,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.IntentCompat
-import androidx.core.content.IntentCompat.getParcelableExtra
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -15,7 +13,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentAudioPlayerBinding
 import com.practicum.playlistmaker.player.domain.models.Track
-import com.practicum.playlistmaker.player.ui.AudioPlayerViewModel.Companion.STATE_PLAYING
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.getValue
@@ -42,11 +39,8 @@ class AudioPlayerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.observePlayerState().observe(viewLifecycleOwner) {
-            changeButton(it == STATE_PLAYING)
-        }
-
-        viewModel.observeProgressTime().observe(viewLifecycleOwner) {
-            binding.trackTimeCurrent.text = it
+            changeButton(it.isPlayButtonEnabled)
+            binding.trackTimeCurrent.text = it.progress
         }
 
         Glide.with(this)
@@ -68,7 +62,7 @@ class AudioPlayerFragment : Fragment() {
             viewModel.onPlayButtonClicked()
         }
         binding.pause.setOnClickListener {
-            viewModel.pausePlayer()
+            viewModel.onPlayButtonClicked()
         }
         binding.menuButton.setOnClickListener{
             findNavController().navigateUp()
@@ -105,17 +99,20 @@ class AudioPlayerFragment : Fragment() {
     }
 
 
-    private fun changeButton(isPlaying: Boolean) {
-        if (isPlaying) {
-            binding.play.visibility = View.GONE
-            binding.pause.visibility = View.VISIBLE
-        } else {
+    private fun changeButton(isPlayButtonEnabled: Boolean) {
+        if (isPlayButtonEnabled) {
             binding.play.visibility = View.VISIBLE
             binding.pause.visibility = View.GONE
+        } else {
+            binding.play.visibility = View.GONE
+            binding.pause.visibility = View.VISIBLE
         }
-
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.onPause()
+    }
     companion object {
         private const val ARGS_TRACK_ID = "TRACK_EXTRA"
         fun createArgs(track: Track): Bundle = bundleOf(ARGS_TRACK_ID to track)

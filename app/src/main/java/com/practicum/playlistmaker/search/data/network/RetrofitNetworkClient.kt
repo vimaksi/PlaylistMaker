@@ -9,10 +9,12 @@ import com.practicum.playlistmaker.search.data.dto.TracksSearchRequest
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import android.content.Context
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class RetrofitNetworkClient(private val trackService: TrackApiService, private val context: Context) : NetworkClient {
 
-    override fun doRequest(dto: Any): Response {
+    override suspend fun doRequest(dto: Any): Response {
         if (isConnected() == false) {
             return Response().apply { resultCode = -1 }
         }
@@ -20,12 +22,13 @@ class RetrofitNetworkClient(private val trackService: TrackApiService, private v
             return Response().apply { resultCode = 400 }
         }
 
-        val response = trackService.search(dto.expression).execute()
-        val body = response.body()
-        return if (body != null) {
-            body.apply { resultCode = response.code() }
-        } else {
-            Response().apply { resultCode = response.code() }
+        return withContext(Dispatchers.IO) {
+            try{
+                val response = trackService.search(dto.expression)
+                response.apply { resultCode = 200 }
+            } catch (e: Throwable) {
+                Response().apply { resultCode = 500 }
+            }
         }
     }
     private fun isConnected(): Boolean {

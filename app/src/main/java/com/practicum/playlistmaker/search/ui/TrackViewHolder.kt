@@ -15,11 +15,6 @@ import com.practicum.playlistmaker.player.domain.models.Track
 
 class TrackViewHolder(private val binding: TrackViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
-//    private val sourceImage: ImageView = itemView.findViewById(R.id.imageAlbum)
-//    private val sourceName: TextView = itemView.findViewById(R.id.trackName)
-//    private val sourceTime: TextView = itemView.findViewById(R.id.trackTime)
-//    private val sourceArtist: TextView = itemView.findViewById(R.id.artistName)
-
     fun bind(model: Track) {
         binding.trackName.text = model.trackName
         binding.artistName.text = ""

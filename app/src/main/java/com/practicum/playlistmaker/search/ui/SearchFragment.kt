@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.search.ui
 
 import android.content.Context.INPUT_METHOD_SERVICE
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,24 +8,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.player.domain.models.Track
 import com.practicum.playlistmaker.player.ui.AudioPlayerFragment
+import com.practicum.playlistmaker.root.ui.RootActivity
 import com.practicum.playlistmaker.search.ui.models.TracksState
+import com.practicum.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
 
 class SearchFragment : Fragment() {
     private val viewModel: TracksViewModel by viewModel()
     private lateinit var simpleTextWatcher: TextWatcher
-    val adapter = TrackAdapter()
-    private val historyAdapter = TrackAdapter()
+    private lateinit var onTrackSearchDebounce: (Track) -> Unit
+    private var adapter: TrackAdapter? = null
+    private var historyAdapter: TrackAdapter? = null
     private var constTextEdit: String = TEXT_EDIT_VALUE
     private var constIsClearButtonVisible: Int = 8
     private lateinit var binding: FragmentSearchBinding
@@ -52,23 +53,33 @@ class SearchFragment : Fragment() {
         binding.inputEditText.setText(constTextEdit.toString())
         binding.clearButton.visibility = constIsClearButtonVisible
 
+        onTrackSearchDebounce =
+            debounce<Track>(
+                CLICK_DEBOUNCE_DELAY,
+                viewLifecycleOwner.lifecycleScope,
+                false
+            ) { track ->
+                findNavController().navigate(
+                    R.id.action_searchFragment_to_audioPlayerFragment,
+                    AudioPlayerFragment.createArgs(track)
+                )
+            }
+        adapter = TrackAdapter { track ->
+            viewModel?.saveTrackToHistory(track)
+            (activity as RootActivity).animateBottomNavigationView()
+            onTrackSearchDebounce(track)
+        }
+
+        historyAdapter = TrackAdapter { track ->
+            viewModel?.saveTrackToHistory(track)
+            (activity as RootActivity).animateBottomNavigationView()
+            onTrackSearchDebounce(track)
+        }
         binding.trackList.adapter = adapter
         binding.trackList.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        adapter.onTrackClick = { track ->
-            viewModel?.onCLickTrack(track)
-            findNavController().navigate(R.id.action_searchFragment_to_audioPlayerFragment,
-                AudioPlayerFragment.createArgs(track))
-        }
-
         binding.trackListSearch.adapter = historyAdapter
-        historyAdapter.onTrackClick = { track ->
-            viewModel?.onCLickTrack(track)
-            findNavController().navigate(R.id.action_searchFragment_to_audioPlayerFragment,
-                AudioPlayerFragment.createArgs(track))
-        }
-
         simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -122,8 +133,8 @@ class SearchFragment : Fragment() {
             trackList.visibility = View.VISIBLE
             historyLayout.visibility = View.GONE
             closeKeyboard()
-            adapter.tracks = foundTrack
-            adapter.notifyDataSetChanged()
+            adapter?.tracks = foundTrack
+            adapter?.notifyDataSetChanged()
         }
     }
 
@@ -137,9 +148,9 @@ class SearchFragment : Fragment() {
                 historyLayout.visibility = View.GONE
             } else {
                 historyLayout.visibility = View.VISIBLE
-                historyAdapter.tracks = foundTrack
+                historyAdapter?.tracks = foundTrack
             }
-            historyAdapter.notifyDataSetChanged()
+            historyAdapter?.notifyDataSetChanged()
         }
     }
 
@@ -192,7 +203,11 @@ class SearchFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        simpleTextWatcher?.let { binding.inputEditText.removeTextChangedListener(it) }//??
+        adapter = null
+        historyAdapter = null//??
+        binding.trackListSearch.adapter = null//??
+        binding.trackList.adapter = null
+        simpleTextWatcher?.let { binding.inputEditText.removeTextChangedListener(it) }
     }
 
     fun render(state: TracksState) {
@@ -209,5 +224,6 @@ class SearchFragment : Fragment() {
         private const val EDIT_TEXT = "EDIT_TEXT"
         private const val TEXT_EDIT_VALUE = ""
         private const val IS_VISIBLE_BUTTON = "IS_VISIBLE_BUTTON"
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }

@@ -1,13 +1,11 @@
 import org.gradle.kotlin.dsl.annotationProcessor
 
 
-
-
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id ("kotlin-parcelize")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -72,4 +70,9 @@ dependencies {
     // Подключаем модуль для работы с ViewBinding
     implementation("com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:4.3.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation(libs.androidx.room.runtime)
+// Kotlin Symbol Processing (KSP)
+    ksp(libs.androidx.room.compiler)
+// Kotlin Extensions для корутин
+    implementation(libs.room.ktx)
 }

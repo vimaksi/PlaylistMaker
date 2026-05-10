@@ -1,12 +1,13 @@
-package com.practicum.playlistmaker.player.domain.models
+package com.practicum.playlistmaker.library.data.db.entity
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-import java.text.SimpleDateFormat
-import java.util.Locale
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Parcelize
-data class Track (
+
+@Entity(tableName = "tracks_table")
+data class TrackEntity (
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
     val trackId: Int,
     val trackName: String, // Название композиции
     val artistName: String, // Имя исполнителя
@@ -16,13 +17,5 @@ data class Track (
     val releaseDate: String?, //Год релиза трека
     val primaryGenreName: String, //Жанр трека
     val country: String, //Страна исполнителя
-    val previewUrl: String?, //ссылка на трек
-    var isLike: Boolean = false
-) : Parcelable
-{
-   fun getFormattedTime(): String =
-        SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis)
-
-   fun getCoverArtwork() = artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
-
-}
+    val previewUrl: String //ссылка на трек
+)

@@ -13,6 +13,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentAudioPlayerBinding
 import com.practicum.playlistmaker.player.domain.models.Track
+import com.practicum.playlistmaker.player.presentation.AudioPlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.getValue
@@ -20,9 +21,10 @@ import kotlin.getValue
 class AudioPlayerFragment : Fragment() {
     private lateinit var binding: FragmentAudioPlayerBinding
 
-     val track: Track by lazy{
+    val track: Track by lazy {
         requireArguments().getParcelable<Track>(ARGS_TRACK_ID)
-            ?: error("Track is missing")}
+            ?: error("Track is missing")
+    }
 
     private val viewModel: AudioPlayerViewModel by viewModel { parametersOf(track) }
     override fun onCreateView(
@@ -37,11 +39,6 @@ class AudioPlayerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.observePlayerState().observe(viewLifecycleOwner) {
-            changeButton(it.isPlayButtonEnabled)
-            binding.trackTimeCurrent.text = it.progress
-        }
 
         Glide.with(this)
             .load(track.getCoverArtwork())
@@ -64,8 +61,22 @@ class AudioPlayerFragment : Fragment() {
         binding.pause.setOnClickListener {
             viewModel.onPlayButtonClicked()
         }
-        binding.menuButton.setOnClickListener{
+        binding.menuButton.setOnClickListener {
             findNavController().navigateUp()
+        }
+        binding.like.setOnClickListener { viewModel.onLikeClicked() }
+
+        viewModel.observePlayerState().observe(viewLifecycleOwner) {
+            changeButton(it.isPlayButtonEnabled)
+            binding.trackTimeCurrent.text = it.progress
+        }
+
+        viewModel.observeLikeState().observe(viewLifecycleOwner) {
+            if (it.isLike) {
+                binding.like.setImageResource(R.drawable.ic_like_active_25_23)
+            } else {
+                binding.like.setImageResource(R.drawable.ic_like_25_23)
+            }
         }
     }
 
@@ -113,6 +124,7 @@ class AudioPlayerFragment : Fragment() {
         super.onPause()
         viewModel.onPause()
     }
+
     companion object {
         private const val ARGS_TRACK_ID = "TRACK_EXTRA"
         fun createArgs(track: Track): Bundle = bundleOf(ARGS_TRACK_ID to track)

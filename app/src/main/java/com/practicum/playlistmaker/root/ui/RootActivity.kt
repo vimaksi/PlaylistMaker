@@ -6,9 +6,12 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import androidx.room.Room
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityRootBinding
+import com.practicum.playlistmaker.library.data.db.AppDatabase
+
 class RootActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRootBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +29,7 @@ class RootActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.audioPlayerFragment -> {
+                R.id.audioPlayerFragment, R.id.createPlaylistFragment -> {
                     bottomNavigationView.visibility = View.GONE
                 }
 

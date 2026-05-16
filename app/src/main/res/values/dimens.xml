@@ -15,6 +15,7 @@
     <dimen name="margin_12">12dp</dimen>
 
     <dimen name="text_size_11">11sp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_small">16sp</dimen>
     <dimen name="text_size_13">13sp</dimen>
     <dimen name="text_size_14">14sp</dimen>

@@ -111,11 +111,11 @@ class CreatePlaylistFragment : Fragment() {
 
         //    Если в момент закрытия пользователь уже добавил обложку, ввёл название или описание,
         confirmDialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Завершить создание плейлиста?")
-            .setMessage("Все несохраненные данные будут потеряны") // Описание диалога
-            .setNeutralButton("Отмена") { dialog, which -> // Добавляет кнопку «Отмена»
+            .setTitle("${getString(R.string.finish_create_pl)}") // Заголовок диалога
+            .setMessage("${getString(R.string.finish_create_pl_msg)}") // Описание диалога
+            .setNeutralButton("${getString(R.string.cancel)}")  { dialog, which -> // Добавляет кнопку «Отмена»
                 dialog.dismiss()
-            }.setPositiveButton("Завершить") { dialog, which ->
+            }.setPositiveButton("${getString(R.string.finish)}")  { dialog, which ->
                 findNavController().popBackStack()
             }
 

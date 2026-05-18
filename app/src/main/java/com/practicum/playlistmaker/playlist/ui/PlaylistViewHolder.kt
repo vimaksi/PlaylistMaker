@@ -1,13 +1,16 @@
 package com.practicum.playlistmaker.playlist.ui
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.playlist.domain.model.Playlist
@@ -26,16 +29,12 @@ class PlaylistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                 else -> ""
             }
         count.text = "${model.count.toString()} $traсks"
-        image.post {
-            val params = image.layoutParams
-            params.height = image.width // Делаем высоту равной ширине
-            image.layoutParams = params
-        }
+
         Glide.with(itemView)
             .load(model.image)
             .placeholder(R.drawable.ic_placeholder_103)
             .centerCrop()
-            .transform(RoundedCorners(dpToPx(16f, itemView.context)))
+            .transform(CenterCrop(),RoundedCorners(dpToPx(8f, itemView.context)))
             .into(image)
     }
 

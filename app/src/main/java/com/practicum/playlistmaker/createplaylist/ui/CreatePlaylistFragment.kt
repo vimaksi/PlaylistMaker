@@ -31,6 +31,7 @@ import java.io.FileOutputStream
 import kotlin.getValue
 
 import androidx.activity.OnBackPressedDispatcher
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 
 class CreatePlaylistFragment : Fragment() {
     private lateinit var binding: FragmentCreatePlaylistBinding
@@ -63,8 +64,9 @@ class CreatePlaylistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Glide.with(this)
-            .load(R.drawable.ic_add_photo_100)
-            .placeholder(R.drawable.ic_add_photo_100)
+            .load(R.drawable.ic_add_photo_312)
+            .placeholder(R.drawable.ic_add_photo_312)
+            .centerCrop()
             .transform(RoundedCorners(dpToPx(8f)))
             .into(
                 binding.pickerImage
@@ -74,8 +76,22 @@ class CreatePlaylistFragment : Fragment() {
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 //обрабатываем событие выбора пользователем фотографии
                 if (uri != null) {
-                    binding.pickerImage.setImageURI(uri)
-                    fileP = saveImageToPrivateStorage(uri, binding.nameEditText.text.toString())
+                    // binding.pickerImage.setImageURI(uri)
+                    Glide.with(this)
+                        .load(uri)
+                        .placeholder(R.drawable.ic_add_photo_312)
+                        .transform(
+                            CenterCrop(), RoundedCorners(
+                                dpToPx(
+                                    8f
+                                )
+                            )
+                        )
+                        .into(
+                            binding.pickerImage
+                        )
+                    val uniqueName = "cover_${System.currentTimeMillis()}"
+                    fileP = saveImageToPrivateStorage(uri, uniqueName)
                 }
             }
         //по нажатию на кнопку pickImage запускаем photo picker

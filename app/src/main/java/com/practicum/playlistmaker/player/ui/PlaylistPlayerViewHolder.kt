@@ -8,7 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils.centerCrop
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.playlist.domain.model.Playlist
 
@@ -30,8 +32,11 @@ class PlaylistPlayerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         Glide.with(itemView)
             .load(model.image)
             .placeholder(R.drawable.ic_placeholder_45)
-            .centerCrop()
-            .transform(RoundedCorners(dpToPx(2f, itemView.context)))
+            .transform(
+                CenterCrop(), RoundedCorners(dpToPx(
+                2f,
+                itemView.context
+            )))
             .into(image)
     }
     fun dpToPx(dp: Float, context: Context): Int {
@@ -41,8 +46,4 @@ class PlaylistPlayerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             context.resources.displayMetrics
         ).toInt()
     }
-//        Если пользователь видит плейлист в списке и плейлист не имеет изображения обложки,
-//        то пользователь видит изображение-заглушку в области для обложки плейлиста.
-//        Если пользователь видит плейлист в списке и плейлист имеет изображения обложки,
-//        то пользователь видит соответствующее изображение в области для обложки плейлиста.
 }

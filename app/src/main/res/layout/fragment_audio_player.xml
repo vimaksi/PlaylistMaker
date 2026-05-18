@@ -287,7 +287,8 @@
             android:layout_gravity="center"
             android:paddingHorizontal="@dimen/padding_small"
             android:paddingVertical="@dimen/icon_padding"
-            android:layout_marginTop="28dp"/>
+            android:layout_marginTop="28dp"
+            android:layout_marginBottom="24dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/playlist"

@@ -19,6 +19,7 @@ class SearchTrackRepositoryImpl(private val networkClient: NetworkClient, privat
 
             200 -> {
                 with(response as TrackSearchResponse) {
+   //                 val listLike =  appDatabase.trackDao().getTrackIds()//??
                     val data = response.results.map{ trackDto ->
                         Track(
                             trackDto.trackId,
@@ -30,7 +31,8 @@ class SearchTrackRepositoryImpl(private val networkClient: NetworkClient, privat
                             trackDto.releaseDate,
                             trackDto.primaryGenreName,
                             trackDto.country,
-                            trackDto.previewUrl
+                            trackDto.previewUrl,
+ //                           isLike = listLike.contains(trackDto.trackId)//?? требования
                         )
                     }
                     emit(Resource.Success(data))

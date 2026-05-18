@@ -205,8 +205,8 @@ class SearchFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         adapter = null
-        historyAdapter = null//??
-        binding.trackListSearch.adapter = null//??
+        historyAdapter = null
+        binding.trackListSearch.adapter = null
         binding.trackList.adapter = null
         simpleTextWatcher?.let { binding.inputEditText.removeTextChangedListener(it) }
     }

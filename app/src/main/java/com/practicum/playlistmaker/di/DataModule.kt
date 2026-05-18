@@ -51,7 +51,7 @@ val dataModule = module {
         RetrofitNetworkClient(get(), androidContext())
     }
 
-    single <ExternalNavigator>{
+    single<ExternalNavigator> {
         ExternalNavigatorImpl(androidContext())
     }
 
@@ -63,11 +63,16 @@ val dataModule = module {
             )
         )
     }
-    single{
-        Room.databaseBuilder(
-        androidContext(),
-        AppDatabase::class.java,
-        "tracks_database"
-    ).build()}
+// 1. Сама база данных (один раз!)
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    // 2. DAO (получаем их из экземпляра базы выше)
+    single { get<AppDatabase>().trackDao() }
+    single { get<AppDatabase>().playlistDao() }
+    single { get<AppDatabase>().trackInPlaylistDao() }
 }
 

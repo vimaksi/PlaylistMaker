@@ -15,7 +15,7 @@ interface TrackDao {
     //получить весь список избранного для отображения в медиатеке
     @Query("SELECT * FROM tracks_table ORDER BY id DESC")
     suspend fun getAllTracks(): List<TrackEntity>
-    //удаление определенного трека из избранного ( unlike)
+    //удаление определенного трека из избранного (unlike)
      @Query("DELETE FROM tracks_table WHERE trackId = :trackId")
      suspend fun deleteTrack(trackId: Int)
     //метод для определения наличия трека в избранном

@@ -13,6 +13,8 @@
     <dimen name="padding_medium">16dp</dimen>
     <dimen name="margin_top_17">17dp</dimen>
     <dimen name="margin_12">12dp</dimen>
+    <dimen name="padding_24">24dp</dimen>
+    <dimen name="padding_21">21dp</dimen>
 
     <dimen name="text_size_11">11sp</dimen>
     <dimen name="text_size_12">12sp</dimen>

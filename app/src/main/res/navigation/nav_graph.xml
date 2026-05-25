@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_libraryFragment_to_createPlaylistFragment"
             app:destination="@id/createPlaylistFragment" />
+        <action
+            android:id="@+id/action_libraryFragment_to_playlistCardFragment"
+            app:destination="@id/playlistCardFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -45,4 +48,20 @@
         android:name="com.practicum.playlistmaker.createplaylist.ui.CreatePlaylistFragment"
         android:label="fragment_create_playlist"
         tools:layout="@layout/fragment_create_playlist" />
+    <fragment
+        android:id="@+id/playlistCardFragment"
+        android:name="com.practicum.playlistmaker.playlistcard.ui.PlaylistCardFragment"
+        android:label="PlaylistCardFragment"
+        tools:layout="@layout/fragment_playlist_card">
+        <action
+            android:id="@+id/action_playlistCardFragment_to_audioPlayerFragment"
+            app:destination="@id/audioPlayerFragment" />
+        <action
+            android:id="@+id/action_playlistCardFragment_to_editPlaylistFragment"
+            app:destination="@id/editPlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPlaylistFragment"
+        android:name="com.practicum.playlistmaker.createplaylist.ui.EditPlaylistFragment"
+        android:label="EditPlaylistFragment" />
 </navigation>

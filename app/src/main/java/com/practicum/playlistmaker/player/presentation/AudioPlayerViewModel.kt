@@ -42,8 +42,6 @@ class AudioPlayerViewModel(
         viewModelScope.launch {
             playlistInteractor.getAllPlaylists()
                 .collect { playlists -> processResultPlaylist(playlists) }
-           // аботьтесь, чтобы ViewModel получала актуальный список плейлистов
-        // при каждом открытии этого Bottom Sheet.
         }
     }
 
@@ -153,21 +151,13 @@ class AudioPlayerViewModel(
 
     fun addTrackToPlaylist(playlist: Playlist,track: Track){
         viewModelScope.launch {
-            //iewModel может определить, присутствует ли добавляемый трек в выбранном плейлисте, без обращения к интерактору,
-            // поскольку в объекте из списка плейлистов есть информация об идентификаторах добавленных в него треков.
-            // ViewModel может сравнить идентификаторы и мгновенно передать в UI результат добавления как сообщение о том,
-            // что трек уже присутствует в плейлисте. Используйте LiveData для передачи в UI статуса добавления трека в плейлист.
             if (playlist.tracks.contains(track.trackId))
                 trackInPlaylistStateLiveData.postValue(TrackInPlaylistState(playlist.name,true))
             else {
-                //Если такого трека в плейлисте нет, ViewModel через интерактор должна передать в репозиторий экземпляр
-                // добавляемого трека и выбранного плейлиста.
                 playlistInteractor.insertTrackInPlaylist(playlist, track)
                 trackInPlaylistStateLiveData.postValue(TrackInPlaylistState(playlist.name,false))
             }
         }
-        //После этих действий через интерактор до ViewModel должна дойти информация об успешном добавлении трека
-        // в выбранный плейлист, чтобы UI мог отреагировать на статус добавления соответствующим образом.
     }
 
     companion object {

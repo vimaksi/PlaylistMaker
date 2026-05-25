@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/menu_button"
+        android:id="@+id/menuButton"
         style="@style/ToolbarStyle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -39,7 +39,7 @@
         app:layout_constraintEnd_toStartOf="@id/rightBorder"
         app:layout_constraintHeight_max="512dp"
         app:layout_constraintStart_toEndOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/menu_button"
+        app:layout_constraintTop_toBottomOf="@id/menuButton"
         app:layout_constraintWidth_max="512dp" />
 
     <com.google.android.material.textfield.TextInputLayout

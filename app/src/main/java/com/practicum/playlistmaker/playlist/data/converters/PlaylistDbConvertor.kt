@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.playlist.data.converters
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.practicum.playlistmaker.favoritetracks.data.db.entity.TrackEntity
 import com.practicum.playlistmaker.player.data.db.entity.TrackInPlaylistEntity
 import com.practicum.playlistmaker.player.domain.models.Track
 import com.practicum.playlistmaker.playlist.data.db.entity.PlaylistEntity
@@ -43,6 +44,20 @@ class PlaylistDbConvertor {
             track.primaryGenreName,
             track.country,
             track.previewUrl ?: "",
+        )
+    }
+    fun mapTrackInPlaylist(trackInPlaylistEntity: TrackInPlaylistEntity): Track {
+        return Track(
+            trackInPlaylistEntity.trackId,
+            trackInPlaylistEntity.trackName,
+            trackInPlaylistEntity.artistName,
+            trackInPlaylistEntity.trackTimeMillis,
+            trackInPlaylistEntity.artworkUrl100,
+            trackInPlaylistEntity.collectionName,
+            trackInPlaylistEntity.releaseDate,
+            trackInPlaylistEntity.primaryGenreName,
+            trackInPlaylistEntity.country,
+            trackInPlaylistEntity.previewUrl
         )
     }
 }

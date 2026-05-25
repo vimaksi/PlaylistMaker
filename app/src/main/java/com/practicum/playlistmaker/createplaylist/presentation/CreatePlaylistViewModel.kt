@@ -9,8 +9,8 @@ import com.practicum.playlistmaker.playlist.domain.db.PlaylistInteractor
 import com.practicum.playlistmaker.playlist.domain.model.Playlist
 import kotlinx.coroutines.launch
 
-class CreatePlaylistViewModel(val interactor: PlaylistInteractor) : ViewModel() {
-    private val stateLiveData = MutableLiveData<NameState>()
+open class CreatePlaylistViewModel(val interactor: PlaylistInteractor) : ViewModel() {
+    val stateLiveData = MutableLiveData<NameState>()
     fun observeState(): LiveData<NameState> = stateLiveData
 
     fun changeName(name: String) {
@@ -22,7 +22,7 @@ class CreatePlaylistViewModel(val interactor: PlaylistInteractor) : ViewModel() 
         }
     }
 
-     fun createPlaylist(name: String, description: String, image: String) {
+     open fun createPlaylist(name: String, description: String, image: String) {
         viewModelScope.launch {
             val playlist = Playlist(name = name, description = description, image = image, tracks =  mutableListOf(), count = 0)
             interactor.insertPlaylist(playlist)

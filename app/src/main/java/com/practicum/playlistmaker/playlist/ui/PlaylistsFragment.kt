@@ -12,9 +12,11 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.practicum.playlistmaker.favoritetracks.presentation.FavoriteTracksViewModel
 import com.practicum.playlistmaker.favoritetracks.ui.FavoriteTracksAdapter
+import com.practicum.playlistmaker.player.ui.AudioPlayerFragment
 import com.practicum.playlistmaker.playlist.domain.model.Playlist
 import com.practicum.playlistmaker.playlist.presentation.PlaylistState
 import com.practicum.playlistmaker.playlist.presentation.PlaylistViewModel
+import com.practicum.playlistmaker.playlistcard.ui.PlaylistCardFragment
 import com.practicum.playlistmaker.root.ui.RootActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
@@ -47,7 +49,12 @@ class PlaylistsFragment : Fragment() {
             )
         }
 
-        adapter = PlaylistAdapter()
+        adapter = PlaylistAdapter { playlistId ->
+            findNavController().navigate(
+                R.id.action_libraryFragment_to_playlistCardFragment,
+                PlaylistCardFragment.createArgs(playlistId)
+            )
+        }
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = GridLayoutManager(
             requireContext(), /*Количество столбцов*/
@@ -86,3 +93,7 @@ class PlaylistsFragment : Fragment() {
         fun newInstance() = PlaylistsFragment()
     }
 }
+
+//и в плейлист добавлен хотя бы один трек, то меню исчезает и пользователь видит стандартный системный share-диалог отправки (SEND) данных типа text в другие приложения на устройстве.
+//В качестве данных для отправки должен использоваться текст: название и описание плейлиста, количество треков, пронумерованный список треков плейлиста в формате «[номер]. [имя исполнителя] - [название трека] ([продолжительность трека])».
+//После успешной отправки текста со списком треков в другое приложение пользователь должен вернуться на экран «Плейлист».

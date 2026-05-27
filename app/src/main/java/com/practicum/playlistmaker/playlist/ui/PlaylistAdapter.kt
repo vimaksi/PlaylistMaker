@@ -5,14 +5,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.playlist.domain.model.Playlist
+import com.practicum.playlistmaker.search.ui.TrackAdapter.TrackClickListener
 
-class PlaylistAdapter(): RecyclerView.Adapter<PlaylistViewHolder>(){
+class PlaylistAdapter(val playlistClickListener: PlaylistClickListener) :
+    RecyclerView.Adapter<PlaylistViewHolder>() {
     var playlists = listOf<Playlist>()
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): PlaylistViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.playlist_view, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.playlist_view, parent, false)
         return PlaylistViewHolder(view)
     }
 
@@ -20,10 +23,16 @@ class PlaylistAdapter(): RecyclerView.Adapter<PlaylistViewHolder>(){
         holder: PlaylistViewHolder,
         position: Int
     ) {
-        holder.bind(playlists[position])
+        val playlist = playlists[position]
+        holder.bind(playlist)
+        holder.itemView.setOnClickListener { playlistClickListener.onPlaylistClick(playlist.id) }
     }
 
     override fun getItemCount(): Int {
         return playlists.size
+    }
+
+    fun interface PlaylistClickListener {
+        fun onPlaylistClick(playlistId: Int)
     }
 }

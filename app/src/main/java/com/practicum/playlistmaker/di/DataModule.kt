@@ -7,6 +7,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.library.data.db.AppDatabase
 import com.practicum.playlistmaker.player.domain.models.Track
+import com.practicum.playlistmaker.playlist.data.ExternalNavigatorPlaylistImpl
+import com.practicum.playlistmaker.playlist.data.storage.ExternalNavigatorPlaylist
 import com.practicum.playlistmaker.search.data.NetworkClient
 import com.practicum.playlistmaker.search.data.StorageClient
 import com.practicum.playlistmaker.search.data.network.RetrofitNetworkClient
@@ -74,5 +76,8 @@ val dataModule = module {
     single { get<AppDatabase>().trackDao() }
     single { get<AppDatabase>().playlistDao() }
     single { get<AppDatabase>().trackInPlaylistDao() }
+    single<ExternalNavigatorPlaylist> {
+        ExternalNavigatorPlaylistImpl(androidContext())
+    }
 }
 

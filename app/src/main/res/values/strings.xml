@@ -50,4 +50,22 @@
     <string name="finish_create_pl_msg">Все несохраненные данные будут потеряны</string>
     <string name="cancel">Отмена</string>
     <string name="finish">Завершить</string>
+    <string name="name_playlist">Best songs 2021</string>
+    <string name="year_playlist">2022</string>
+    <string name="time_playlist">300 минут</string>
+    <string name="track_in_playlist">98 треков</string>
+    <string name="empty_playlist_card">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="would_you_delete_track">Хотите удалить трек?</string>
+    <string name="would_you_delete_playlist">Хотите удалить плейлист</string>
+    <string name="yes_message">Да</string>
+    <string name="no_message">Нет</string>
+    <string name="share">Поделиться</string>
+    <string name="edit_info">Редактировать информацию</string>
+    <string name="delete_playlist">Удалить плейлист</string>
+    <string name="save">Сохранить</string>
+    <string name="edit">Редактировать</string>
+    <string name="delete_playlist_header">Удалить плейлист</string>
+    <string name="delete_pl_descr">Вы уверены, что хотите удалить этот плейлист?</string>
+    <string name="delete_mes">Удалить</string>
+    <string name="empty_playlist_mes">В этом плейлисте нет треков</string>
 </resources>

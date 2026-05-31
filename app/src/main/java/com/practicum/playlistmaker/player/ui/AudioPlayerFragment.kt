@@ -5,6 +5,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.logEvent
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentAudioPlayerBinding
 import com.practicum.playlistmaker.player.domain.models.Track
@@ -64,8 +67,12 @@ class AudioPlayerFragment : Fragment() {
         }
         visibleText(track)
 
+        val analytics = FirebaseAnalytics.getInstance(requireContext())
         binding.play.setOnClickListener {
             viewModel.onPlayButtonClicked()
+            analytics.logEvent(FirebaseAnalytics.Event.APP_OPEN) {
+                param(FirebaseAnalytics.Param.ITEM_ID, 123)
+            }
         }
         binding.pause.setOnClickListener {
             viewModel.onPlayButtonClicked()
@@ -73,7 +80,12 @@ class AudioPlayerFragment : Fragment() {
         binding.menuButton.setOnClickListener {
             findNavController().navigateUp()
         }
-        binding.like.setOnClickListener { viewModel.onLikeClicked() }
+        binding.like.setOnClickListener {
+            viewModel.onLikeClicked()
+            analytics.logEvent(FirebaseAnalytics.Event.APP_OPEN) {
+                param(FirebaseAnalytics.Param.ITEM_ID, 1234)
+            }
+        }
 
         viewModel.observePlayerState().observe(viewLifecycleOwner) {
             changeButton(it.isPlayButtonEnabled)
@@ -124,8 +136,7 @@ class AudioPlayerFragment : Fragment() {
                     "Трек уже добавлен в плейлист ${it.name}",
                     Toast.LENGTH_SHORT
                 ).show()
-            }
-            else {
+            } else {
                 Toast.makeText(
                     requireContext(),
                     "Добавлено в плейлист ${it.name}",
@@ -152,7 +163,6 @@ class AudioPlayerFragment : Fragment() {
             requireContext(), /*Количество столбцов*/
             1
         ) //ориентация по умолчанию — вертикальная
-
 
 
         requireActivity().onBackPressedDispatcher.addCallback(

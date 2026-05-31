@@ -26,11 +26,20 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+           // buildConfigField ("String", "SERVER_BASE_URL", "\"https://prod.myapplication.com/\"")
+           // buildConfigField ("int", "SERVER_VERSION", "10")
+
+        }
+        debug {
+            applicationIdSuffix = ".debug"
+            isMinifyEnabled = false
+           // buildConfigField ("String", "SERVER_BASE_URL", "\"https://dev.myapplication.com/\"")
+           // buildConfigField ("int", "SERVER_VERSION", "7")
         }
     }
     compileOptions {

@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.di
 import android.content.Context
 import android.media.MediaPlayer
 import androidx.room.Room
+import com.google.firebase.BuildConfig
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.library.data.db.AppDatabase
@@ -27,6 +28,7 @@ val dataModule = module {
     single<TrackApiService> {
         Retrofit.Builder()
             .baseUrl("https://itunes.apple.com/")
+            //.baseUrl(BuildConfig.SERVER_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(TrackApiService::class.java)

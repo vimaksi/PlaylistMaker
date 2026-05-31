@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id ("kotlin-parcelize")
     id("com.google.devtools.ksp")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -35,12 +36,12 @@ android {
            // buildConfigField ("int", "SERVER_VERSION", "10")
 
         }
-        debug {
-            applicationIdSuffix = ".debug"
-            isMinifyEnabled = false
-           // buildConfigField ("String", "SERVER_BASE_URL", "\"https://dev.myapplication.com/\"")
-           // buildConfigField ("int", "SERVER_VERSION", "7")
-        }
+//        debug {
+//            applicationIdSuffix = ".debug"
+//            isMinifyEnabled = false
+//           // buildConfigField ("String", "SERVER_BASE_URL", "\"https://dev.myapplication.com/\"")
+//           // buildConfigField ("int", "SERVER_VERSION", "7")
+//        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -84,4 +85,6 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 // Kotlin Extensions для корутин
     implementation(libs.room.ktx)
+    implementation(platform("com.google.firebase:firebase-bom:34.14.0"))
+    implementation("com.google.firebase:firebase-analytics")
 }
